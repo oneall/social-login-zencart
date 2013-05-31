@@ -1,0 +1,37 @@
+ *** Social Login installation ***
+
+1.	
+	Extract all files and folders from the /root/ folder of this archive
+	to the root directory of your Zen-Cart installation.
+
+
+2.
+	Extract all files and folders from the /admin/ folder of this archive
+	to the /admin/ directory of your Zen Cart. If you have renamed the /admin/ 
+	folder then extract the files into the renamed folder instead.
+	
+			
+3.
+	Open the file oneallsociallogin_install.php in your browser. This will
+	install Social Login in your Zen-Cart Shop.
+	
+
+4.
+	Login to your Zen-Cart administration area and navigate to the page
+	Tools\OneAll Social Login.
+	
+
+5.
+	Enter your API credentials and select the social networks to use.
+	
+	To obtain your API credentials you have to create a new account
+	at https://app.oneall.com/signup/
+
+	
+6.
+	Remove the file oneallsociallogin_install.php uploaded in step 3.
+	
+	
+7.
+	Thank you for using our services! Enjoy!
+	

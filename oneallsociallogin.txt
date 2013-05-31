@@ -1,0 +1,67 @@
+*******************************************************************************
+** VERSION 1.0
+*******************************************************************************
+
+OneAll Social Login
+
+OneAll Social Login for Zen Cart is a professional addon that allows your 
+visitors to login and register with social networks like Twitter, Facebook, 
+LinkedIn, LiveJournal, StackExchange, Hyves, Google and Yahoo amongst others.
+
+
+*** Social Login increases your registration rate ***
+Social Login helps increasing your user registration rate by simplifying the
+registration process and provides permission-based social data retrieved from
+the social network profiles.
+
+
+*** Social Login integrates with your existing system ***
+OneAll Social Login integrates with your existing registration system so you
+and your users don't have to start from scratch.
+
+
+*** 20+ Supported Social Networks ***
+- Facebook
+- Twitter
+- Google
+- LinkedIn
+- Foursquare
+- Yahoo
+- OpenID
+- Github.com
+- Paypal
+- LiveJournal
+- Skyrock.com
+- WordPress.com
+- Hyves
+- VKontakte
+- Mail.ru
+- Steam Community
+- Odnoklassniki
+- StackExchange
+- Steam
+- YouTube
+- Windows Live
+
+
+*** About Us ***
+Social Login is maintained by OneAll, a technology company offering a set of
+web-delivered tools and services for establishing and optimizing a site's 
+connection with social networks.
+
+
+*** Visit us at: ***
+http://www.oneall.com
+
+
+*** Need help? ***
+The Social Login documentation is available at:
+http://docs.oneall.com/plugins/guide/social-login-zencart/
+
+We are devoted to creating a positive experience for our customers and always
+try to go above and beyond your expectations. Do not hesitate to contact us for
+questions about the Social Login Module, to give us your feedback or if you 
+need any help with the integration of the modification.
+
+Our team answers your questions at:
+http://www.oneall.com/company/contact-us/
