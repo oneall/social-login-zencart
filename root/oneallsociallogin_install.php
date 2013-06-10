@@ -47,6 +47,7 @@ $providers = array (
 	'twitter' => 'Twitter',
 	'google' => 'Google',
 	'linkedin' => 'LinkedIn',
+	'xing' => 'Xing',
 	'yahoo' => 'Yahoo',
 	'github' => 'Github.com',
 	'foursquare' => 'Foursquare',
