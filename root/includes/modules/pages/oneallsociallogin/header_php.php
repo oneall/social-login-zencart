@@ -94,13 +94,13 @@ if (isset ($_SESSION ['oasl_user_data']))
 	//Make sure it's valid
 	if (is_array ($user_data) AND !empty ($user_data ['user_token']))
 	{
-		//Return to this page
+		// Return to this page afterwards.
 		$origin = ( ! empty ($user_data['origin']) ? $user_data['origin'] : '');
 
-		// Get user by token
+		// Get user by token.
 		$customers_id = oneallsociallogin_tools::get_customers_id_for_user_token ($user_data ['user_token']);
 
-		//This is a new users
+		// This is a new user.
 		if (!is_numeric ($customers_id))
 		{
 			//Linking enabled?
@@ -122,7 +122,7 @@ if (isset ($_SESSION ['oasl_user_data']))
 			}
 		}
 
-		//We have not linked the social network account to an existing user
+		// We have not linked the social network account to an existing user.
 		if (!is_numeric ($customers_id))
 		{
 
@@ -136,9 +136,28 @@ if (isset ($_SESSION ['oasl_user_data']))
 				$user_data ['user_birthdate'] = (isset ($_POST ['dob']) ? zen_db_prepare_input ($_POST ['dob']) : '');
 				$user_data ['user_email'] = (isset ($_POST ['email_address']) ? zen_db_prepare_input ($_POST ['email_address']) : '');
 				$user_data ['user_phone'] = (isset ($_POST ['telephone']) ? zen_db_prepare_input ($_POST ['telephone']) : '');
+				$user_data ['user_country_id'] = (isset ($_POST ['country_id']) ? zen_db_prepare_input ($_POST ['country_id']) : '');
 
 				//Set if details are missing
 				$error = false;
+
+				//Verify country
+				if (! empty ($user_data ['user_country_id']) AND is_numeric ($user_data ['user_country_id']))
+				{
+					$query = "SELECT COUNT(*) AS total FROM " . TABLE_COUNTRIES . " WHERE countries_id = :country_id";
+					$query = $db->bindVars($query, ':country_id', $user_data ['user_country_id'], 'integer');
+					$result = $db->Execute($query);
+					if ($result->fields['total'] <= 0)
+					{
+						$error = true;
+						$messageStack->add ('oneallsociallogin', ENTRY_COUNTRY_ERROR);
+					}
+				}
+				else
+				{
+					$error = true;
+					$messageStack->add ('oneallsociallogin', ENTRY_COUNTRY_ERROR);
+				}
 
 				//Verify gender
 				if (ACCOUNT_GENDER == 'true')

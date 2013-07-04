@@ -95,6 +95,13 @@
 			?>
 			<br class="clearBoth" />
 
+			<label class="inputLabel" for="country"><?php echo ENTRY_COUNTRY; ?></label>
+			<?php
+				$country = (!empty ($user_data ['user_country_id']) ? $user_data ['user_country_id'] : '');
+				echo zen_get_country_list('country_id', $country, 'id="country" ') . (zen_not_null(ENTRY_COUNTRY_TEXT) ? '<span class="alert">' . ENTRY_COUNTRY_TEXT . '</span>': '');
+			?>
+			<br class="clearBoth" />
+
 		</fieldset>
 		<div class="buttonRow forward"><?php echo zen_image_submit (BUTTON_IMAGE_UPDATE, BUTTON_UPDATE_ALT); ?></div>
 		<br class="clearBoth" />

@@ -138,16 +138,40 @@ if ( ! class_exists('oneallsociallogin_tools'))
 						'customers_authorization' => (int) CUSTOMERS_APPROVAL_AUTHORIZATION
 				);
 
-				//Add customer
+				// Add new customer.
 				zen_db_perform (TABLE_CUSTOMERS, $customer_data);
 				$customers_id = $db->Insert_ID ();
 
-				// Create a new user account.
+				// Make sure the account has been created.
 				if (is_numeric ($customers_id))
 				{
 					$customer_data['customers_id'] = $customers_id;
 
-					// Tie the tokens to the newly created member.
+					// Prepare address data.
+					$address_data = array(
+						'customers_id' => $customers_id,
+						'entry_country_id' => (! empty ($user_data ['user_country_id']) ? $user_data ['user_country_id'] : 1),
+						'entry_firstname' => $user_data ['user_first_name'],
+						'entry_lastname' => $user_data ['user_last_name'],
+						'entry_gender' => ( ! empty ($user_data ['user_gender']) ? $user_data ['user_gender'] : '')
+					);
+
+					// Add address.
+					zen_db_perform(TABLE_ADDRESS_BOOK, $address_data);
+					$address_id = $db->Insert_ID();
+
+					// Assign as default address for customer.
+					$query = "UPDATE " . TABLE_CUSTOMERS . " SET `customers_default_address_id` = :customers_default_address_id WHERE `customers_id`=:customers_id";
+					$query = $db->bindVars($query, ':customers_default_address_id', $address_id, 'integer');
+					$query = $db->bindVars($query, ':customers_id', $customers_id, 'integer');
+					$db->Execute($query);
+
+					// Add customer info.
+					$query = "INSERT IGNORE INTO " . TABLE_CUSTOMERS_INFO ." SET `customers_info_id`=:customers_info_id, customers_info_number_of_logons=0, customers_info_date_account_created=NOW()";
+					$query = $db->bindVars($query, ':customers_info_id', $customers_id, 'integer');
+					$db->Execute ($query);
+
+					// Tie the tokens to the newly created customer.
 					if (self::link_tokens_to_customers_id ($customers_id, $user_data['user_token'], $user_data['identity_token'], $user_data['identity_provider']))
 					{
 						//Send an email to the customer
@@ -316,7 +340,6 @@ if ( ! class_exists('oneallsociallogin_tools'))
 			$query = "UPDATE ".TABLE_ONEALLSOCIALLOGIN_IDENTITY." SET `num_logins`=`num_logins`+1 WHERE `identity_token`=:identity_token LIMIT 1";
 			$query = $db->bindVars($query, ':identity_token', $identity_token, 'string');
 			return $db->Execute ($query);
-
 		}
 
 
