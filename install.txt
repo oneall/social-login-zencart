@@ -1,13 +1,13 @@
  *** Social Login installation ***
 
-1.	
+1. 
 	Extract all files and folders from the /root/ folder of this archive
-	to the root directory of your Zen-Cart installation.
+	to the root folder of your Zen-Cart installation.
 
 
 2.
 	Extract all files and folders from the /admin/ folder of this archive
-	to the /admin/ directory of your Zen Cart. If you have renamed the /admin/ 
+	to the /admin/ folder of your Zen-Cart. If you have renamed the /admin/ 
 	folder then extract the files into the renamed folder instead.
 	
 			
