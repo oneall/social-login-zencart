@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   	OneAll Social Login
- * @copyright 	Copyright 2013 http://www.oneall.com - All rights reserved.
+ * @copyright 	Copyright 2012 http://www.oneall.com - All rights reserved.
  * @license   	GNU/GPL 2 or later
  *
  * This program is free software; you can redistribute it and/or
@@ -65,7 +65,10 @@ if (isset ($_POST) AND !empty ($_POST ['oa_action']) AND $_POST ['oa_action'] ==
 		$api_resource_url = $api_connection_protocol . '://' . $api_subdomain . '.api.oneall.com/connections/' . $_POST ['connection_token'] . '.json';
 
 		// Get connection details.
-		$result = oneallsociallogin_tools::do_api_request ($api_connection_handler, $api_resource_url, array ('api_key' => $api_key, 'api_secret' => $api_secret));
+		$result = oneallsociallogin_tools::do_api_request ($api_connection_handler, $api_resource_url, array (
+			'api_key' => $api_key,
+			'api_secret' => $api_secret
+		));
 
 		// Parse OneAll API result.
 		if (is_object ($result) AND property_exists ($result, 'http_code') AND $result->http_code == 200)
@@ -73,7 +76,7 @@ if (isset ($_POST) AND !empty ($_POST ['oa_action']) AND $_POST ['oa_action'] ==
 			if (($tmp = oneallsociallogin_tools::extract_social_network_profile ($result)) !== false)
 			{
 				// Add the origin to the session so that we can go back to it later.
-				$tmp['origin'] = ( ! empty ($_GET['origin']) ? $_GET['origin'] : '');
+				$tmp ['origin'] = (!empty ($_GET ['origin']) ? $_GET ['origin'] : '');
 
 				// Setup the Social Login session.
 				$_SESSION ['oasl_user_data'] = serialize ($tmp);
@@ -95,7 +98,7 @@ if (isset ($_SESSION ['oasl_user_data']))
 	if (is_array ($user_data) AND !empty ($user_data ['user_token']))
 	{
 		// Return to this page afterwards.
-		$origin = ( ! empty ($user_data['origin']) ? $user_data['origin'] : '');
+		$origin = (!empty ($user_data ['origin']) ? $user_data ['origin'] : '');
 
 		// Get user by token.
 		$customers_id = oneallsociallogin_tools::get_customers_id_for_user_token ($user_data ['user_token']);
@@ -129,25 +132,57 @@ if (isset ($_SESSION ['oasl_user_data']))
 			//Complete the user details with the form values
 			if (isset ($_POST ['action']) AND ($_POST ['action'] == 'process'))
 			{
-				//Parse form fields.
-				$user_data ['user_gender'] = (isset ($_POST ['gender']) ? zen_db_prepare_input ($_POST ['gender']) : '');
+				//User data
 				$user_data ['user_first_name'] = (isset ($_POST ['firstname']) ? zen_db_prepare_input ($_POST ['firstname']) : '');
 				$user_data ['user_last_name'] = (isset ($_POST ['lastname']) ? zen_db_prepare_input ($_POST ['lastname']) : '');
-				$user_data ['user_birthdate'] = (isset ($_POST ['dob']) ? zen_db_prepare_input ($_POST ['dob']) : '');
+				$user_data ['user_gender'] = ((ACCOUNT_GENDER == 'true' AND isset ($_POST ['gender'])) ? zen_db_prepare_input ($_POST ['gender']) : '');
+				$user_data ['user_birthdate'] = ((ACCOUNT_DOB == 'true' AND isset ($_POST ['dob'])) ? zen_db_prepare_input ($_POST ['dob']) : '');
+
+				//Contact details
 				$user_data ['user_email'] = (isset ($_POST ['email_address']) ? zen_db_prepare_input ($_POST ['email_address']) : '');
 				$user_data ['user_phone'] = (isset ($_POST ['telephone']) ? zen_db_prepare_input ($_POST ['telephone']) : '');
-				$user_data ['user_country_id'] = (isset ($_POST ['country_id']) ? zen_db_prepare_input ($_POST ['country_id']) : '');
+
+				//Address
+				$user_data ['user_street_address'] = (isset ($_POST ['street_address']) ? zen_db_prepare_input ($_POST ['street_address']) : '');
+				$user_data ['user_city'] = (isset ($_POST ['city']) ? zen_db_prepare_input ($_POST ['city']) : '');
+				$user_data ['user_postcode'] = (isset ($_POST ['postcode']) ? zen_db_prepare_input ($_POST ['postcode']) : '');
+				$user_data ['user_suburb'] = ((ACCOUNT_SUBURB == 'true' AND isset ($_POST ['suburb'])) ? zen_db_prepare_input ($_POST ['suburb']) : '');
+
+				//Country
+				if (isset ($_POST ['country_id']) AND strlen (trim ($_POST ['country_id'])) > 0)
+				{
+					$user_data ['user_country_id'] = zen_db_prepare_input ($_POST ['country_id']);
+					$user_data ['user_selected_country_id'] = $_POST ['country_id'];
+				}
+				else
+				{
+					$user_data ['user_country_id'] = '';
+					$user_data ['user_selected_country_id'] = SHOW_CREATE_ACCOUNT_DEFAULT_COUNTRY;
+				}
+
+				//State
+				if (ACCOUNT_STATE == 'true')
+				{
+					$user_data ['user_state']  = (isset ($_POST ['state']) ? zen_db_prepare_input($_POST['state']) : '');
+					$user_data ['user_zone_id'] = (isset ($_POST ['zone_id']) ? zen_db_prepare_input($_POST['zone_id']) : 0);
+				}
+				else
+				{
+					$user_data ['user_state'] = '';
+					$user_data ['user_zone_id'] = 0;
+				}
+
 
 				//Set if details are missing
 				$error = false;
 
 				//Verify country
-				if (! empty ($user_data ['user_country_id']) AND is_numeric ($user_data ['user_country_id']))
+				if (!empty ($user_data ['user_country_id']) AND is_numeric ($user_data ['user_country_id']))
 				{
 					$query = "SELECT COUNT(*) AS total FROM " . TABLE_COUNTRIES . " WHERE countries_id = :country_id";
-					$query = $db->bindVars($query, ':country_id', $user_data ['user_country_id'], 'integer');
-					$result = $db->Execute($query);
-					if ($result->fields['total'] <= 0)
+					$query = $db->bindVars ($query, ':country_id', $user_data ['user_country_id'], 'integer');
+					$result = $db->Execute ($query);
+					if ($result->fields ['total'] <= 0)
 					{
 						$error = true;
 						$messageStack->add ('oneallsociallogin', ENTRY_COUNTRY_ERROR);
@@ -186,7 +221,7 @@ if (isset ($_SESSION ['oasl_user_data']))
 				//Verify date of birth
 				if (ACCOUNT_DOB == 'true')
 				{
-					if (ENTRY_DOB_MIN_LENGTH > 0 or !empty ($_POST ['dob']))
+					if (ENTRY_DOB_MIN_LENGTH > 0 or !empty ($user_data ['user_birthdate']))
 					{
 						if (substr_count ($user_data ['user_birthdate'], '/') > 2 || checkdate ((int) substr (zen_date_raw ($user_data ['user_birthdate']), 4, 2), (int) substr (zen_date_raw ($user_data ['user_birthdate']), 6, 2), (int) substr (zen_date_raw ($user_data ['user_birthdate']), 0, 4)) == false)
 						{
@@ -226,6 +261,118 @@ if (isset ($_SESSION ['oasl_user_data']))
 					$messageStack->add ('oneallsociallogin', ENTRY_TELEPHONE_NUMBER_ERROR);
 				}
 
+				//Verify Street
+				if (strlen ($user_data ['user_street_address']) < ENTRY_STREET_ADDRESS_MIN_LENGTH)
+				{
+					$error = true;
+					$messageStack->add ('oneallsociallogin', ENTRY_STREET_ADDRESS_ERROR);
+				}
+
+				//Verify City
+				if (strlen ($user_data ['user_city']) < ENTRY_CITY_MIN_LENGTH)
+				{
+					$error = true;
+					$messageStack->add ('oneallsociallogin', ENTRY_CITY_ERROR);
+				}
+
+				//Postal Code
+				if (strlen ($user_data ['user_postcode']) < ENTRY_POSTCODE_MIN_LENGTH)
+				{
+					$error = true;
+					$messageStack->add ('oneallsociallogin', ENTRY_POST_CODE_ERROR);
+				}
+
+				//State
+				$user_data['show_pulldown_states'] = false;
+				if (ACCOUNT_STATE == 'true')
+				{
+					//Country must be selected first
+					if ( ! empty ($user_data ['user_country_id']))
+					{
+						//Check if the country has zones
+						$query1 = "SELECT count(*) AS total FROM " . TABLE_ZONES . " WHERE zone_country_id = :zoneCountryID";
+						$query1 = $db->bindVars($query1, ':zoneCountryID', $user_data ['user_country_id'], 'integer');
+						$result1 = $db->Execute($query1);
+
+						//Country has zones
+						if ($result1->fields['total'] > 0)
+						{
+							//Show the dropdown
+							$user_data['show_pulldown_states'] = true;
+
+							//A zone has been selected
+							if (! empty ($user_data ['user_zone_id']))
+							{
+								$query2  = "SELECT distinct zone_id, zone_name, zone_code FROM " . TABLE_ZONES . " WHERE zone_country_id = :zoneCountryID AND zone_id = :zoneID";
+								$query2 = $db->bindVars($query2, ':zoneCountryID', $user_data ['user_country_id'], 'integer');
+								$query2 = $db->bindVars($query2, ':zoneID', $user_data['user_zone_id'], 'integer');
+								$result2 = $db->Execute($query2);
+								if ($result2->RecordCount() == 1)
+								{
+									$user_data ['user_zone_id'] = $result2->fields['zone_id'];
+									$user_data ['user_zone_name'] = $result2->fields['zone_name'];
+									$user_data ['user_state'] = $result2->fields['zone_name'];
+								}
+								else
+								{
+									$messageStack->add('oneallsociallogin', ENTRY_STATE_ERROR_SELECT);
+								}
+							}
+							//No zone has been selected
+							else
+							{
+								//It might have been entered manually
+								if ( ! empty ($user_data ['user_state']))
+								{
+									$query3  = "SELECT distinct zone_id, zone_name, zone_code FROM " . TABLE_ZONES . " WHERE zone_country_id = :zoneCountryID AND (UPPER(zone_name) like ':zoneState%' OR UPPER(zone_code) like '%:zoneState%')";
+									$query3 = $db->bindVars($query3, ':zoneCountryID', $user_data ['user_country_id'], 'integer');
+									$query3 = $db->bindVars($query3, ':zoneState', strtoupper($user_data ['user_state']), 'noquotestring');
+									$result3 = $db->Execute($query3);
+
+									//Look for an exact match on zone ISO code
+									if ($result3->RecordCount() > 1)
+									{
+										$found_match = false;
+
+										while (!$result3->EOF && !$found_match)
+										{
+											if (strtoupper($result3->fields['zone_code']) == strtoupper($user_data ['user_state']) OR strtoupper($result3->fields['zone_name']) == strtoupper($user_data ['user_state']))
+											{
+												$user_data ['user_zone_id'] = $result3->fields['zone_id'];
+												$user_data ['user_zone_name'] = $result3->fields['zone_name'];
+												$user_data ['user_state'] = $result3->fields['zone_name'];
+												$user_data['show_pulldown_states'] = true;
+
+												//Found!
+												$found_match = true;
+											}
+											else
+											{
+												$result3->MoveNext();
+											}
+										}
+									}
+									elseif ($result3->RecordCount() == 1)
+									{
+										$user_data ['user_zone_id'] = $result3->fields['zone_id'];
+										$user_data ['user_zone_name'] = $result3->fields['zone_name'];
+										$user_data ['user_state'] = $result3->fields['zone_name'];
+										$user_data['show_pulldown_states'] = true;
+									}
+									else
+									{
+										$messageStack->add('oneallsociallogin', ENTRY_STATE_ERROR_SELECT);
+									}
+								}
+								else
+								{
+									$messageStack->add('oneallsociallogin', ENTRY_STATE_ERROR_SELECT);
+								}
+							}
+						}
+					}
+				}
+
 				//No errors?
 				if (!$error)
 				{
@@ -257,7 +404,7 @@ if (isset ($_SESSION ['oasl_user_data']))
 				if ($new_registration)
 				{
 					//Redirect
-					zen_redirect(zen_href_link(FILENAME_CREATE_ACCOUNT_SUCCESS));
+					zen_redirect (zen_href_link (FILENAME_CREATE_ACCOUNT_SUCCESS));
 
 					//Done
 					$zco_notifier->notify ('NOTIFY_LOGIN_SUCCESS_VIA_CREATE_ACCOUNT');

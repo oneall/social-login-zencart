@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   	OneAll Social Login
- * @copyright 	Copyright 2013 http://www.oneall.com - All rights reserved.
+ * @copyright 	Copyright 2012 http://www.oneall.com - All rights reserved.
  * @license   	GNU/GPL 2 or later
  *
  * This program is free software; you can redistribute it and/or
@@ -43,80 +43,51 @@ if (!defined ('TABLE_ONEALLSOCIALLOGIN'))
 // Output
 $messages = array ();
 
-// Check if Social Login is installed.
-$sql = "SHOW TABLES like '".TABLE_ONEALLSOCIALLOGIN_CONFIG."'";
-$result = $db->Execute ($sql);
-$num_entries = $result->RecordCount();
-
-// There are no entries : Social Login is not installed
-if (empty ($num_entries))
+// Cleanup layout_boxes
+$sql = "SELECT `layout_id` FROM " . TABLE_LAYOUT_BOXES . " WHERE `layout_box_name` = 'oneallsociallogin.php'";
+$rows = $db->Execute ($sql);
+while (!$rows->EOF)
 {
-	$messages [] = "Could not find the table <em>".TABLE_ONEALLSOCIALLOGIN_CONFIG."</em> : Social Login does not seem to be installed";
-	$messages [] = "<strong>UnInstallation Aborted!</strong>";
-}
-else
-{
-	// Prevent removal if there are already entries.
-	$sql = "SELECT COUNT(*) AS total FROM " . TABLE_ONEALLSOCIALLOGIN_USER;
+	// Remove
+	$sql = "DELETE FROM " . TABLE_LAYOUT_BOXES . " WHERE `layout_id` = '" . $rows->fields ['layout_id'] . "'";
 	$result = $db->Execute ($sql);
-	$num_users = $result->fields ['total'];
+	$messages [] = "Database entry [" . TABLE_LAYOUT_BOXES . ":" . $rows->fields ['layout_id'] . "] removed";
 
-	// There are already entries : cannot remove at this time
-	if ( ! empty ($num_users))
-	{
-		$messages [] = "For security reasons Social Login cannot be uninstalled at this time: there are already entries in the table <em>".TABLE_ONEALLSOCIALLOGIN_USER."</em>";
-		$messages [] = "Please manually empty the table <em>".TABLE_ONEALLSOCIALLOGIN_USER."</em> and then try again.";
-		$messages [] = "<strong>UnInstallation Aborted!</strong>";
-	}
-	else
-	{
-		// Cleanup layout_boxes
-		$sql = "SELECT `layout_id` FROM " . TABLE_LAYOUT_BOXES . " WHERE `layout_box_name` = 'oneallsociallogin.php'";
-		$rows = $db->Execute ($sql);
-		while (!$rows->EOF)
-		{
-			// Remove
-			$sql = "DELETE FROM " . TABLE_LAYOUT_BOXES . " WHERE `layout_id` = '" . $rows->fields ['layout_id'] . "'";
-			$result = $db->Execute ($sql);
-			$messages [] = "Database entry [" . TABLE_LAYOUT_BOXES . ":" . $rows->fields ['layout_id'] . "] removed";
-
-			// Goto next row
-			$rows->MoveNext ();
-		}
-
-		// Cleanup admin_pages
-		$sql = "SELECT `page_key` FROM " . TABLE_ADMIN_PAGES . " WHERE `page_key` = 'configOneallSocialLoginSettings'";
-		$rows = $db->Execute ($sql);
-		while (!$rows->EOF)
-		{
-			// Remove
-			$sql = "DELETE FROM " . TABLE_ADMIN_PAGES . " WHERE `page_key` = '" . $rows->fields ['page_key'] . "'";
-			$result = $db->Execute ($sql);
-			$messages [] = "Database entry [" . TABLE_ADMIN_PAGES . ":" . $rows->fields ['page_key'] . "] removed";
-
-			// Goto next row
-			$rows->MoveNext ();
-		}
-
-		//Remove users table
-		$sql = "DROP TABLE IF EXISTS " . TABLE_ONEALLSOCIALLOGIN_USER;
-		$result = $db->Execute ($sql);
-		$messages [] = "Database table [" . TABLE_ONEALLSOCIALLOGIN_USER . "] removed";
-
-		// Remove identity table
-		$sql = "DROP TABLE IF EXISTS " . TABLE_ONEALLSOCIALLOGIN_IDENTITY;
-		$result = $db->Execute ($sql);
-		$messages [] = "Database table [" . TABLE_ONEALLSOCIALLOGIN_IDENTITY . "] removed";
-
-		// Remove config table
-		$sql = "DROP TABLE IF EXISTS " . TABLE_ONEALLSOCIALLOGIN_CONFIG;
-		$result = $db->Execute ($sql);
-		$messages [] = "Database table [" . TABLE_ONEALLSOCIALLOGIN_CONFIG . "] removed";
-
-		//Done!
-		$messages [] = "<strong>Done! Please remove this file now.</strong>";
-	}
+	// Goto next row
+	$rows->MoveNext ();
 }
+
+// Cleanup admin_pages
+$sql = "SELECT `page_key` FROM " . TABLE_ADMIN_PAGES . " WHERE `page_key` = 'configOneallSocialLoginSettings'";
+$rows = $db->Execute ($sql);
+while (!$rows->EOF)
+{
+	// Remove
+	$sql = "DELETE FROM " . TABLE_ADMIN_PAGES . " WHERE `page_key` = '" . $rows->fields ['page_key'] . "'";
+	$result = $db->Execute ($sql);
+	$messages [] = "Database entry [" . TABLE_ADMIN_PAGES . ":" . $rows->fields ['page_key'] . "] removed";
+
+	// Goto next row
+	$rows->MoveNext ();
+}
+
+//Remove users table
+$sql = "DROP TABLE IF EXISTS " . TABLE_ONEALLSOCIALLOGIN_USER;
+$result = $db->Execute ($sql);
+$messages [] = "Database table [" . TABLE_ONEALLSOCIALLOGIN_USER . "] removed";
+
+// Remove identity table
+$sql = "DROP TABLE IF EXISTS " . TABLE_ONEALLSOCIALLOGIN_IDENTITY;
+$result = $db->Execute ($sql);
+$messages [] = "Database table [" . TABLE_ONEALLSOCIALLOGIN_IDENTITY . "] removed";
+
+// Remove config table
+$sql = "DROP TABLE IF EXISTS " . TABLE_ONEALLSOCIALLOGIN_CONFIG;
+$result = $db->Execute ($sql);
+$messages [] = "Database table [" . TABLE_ONEALLSOCIALLOGIN_CONFIG . "] removed";
+
+//Done!
+$messages [] = "<strong>Done! Please remove this file now.</strong>"
 
 ?>
 <!doctype html>

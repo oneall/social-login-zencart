@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   	OneAll Social Login
- * @copyright 	Copyright 2013 http://www.oneall.com - All rights reserved.
+ * @copyright 	Copyright 2012 http://www.oneall.com - All rights reserved.
  * @license   	GNU/GPL 2 or later
  *
  * This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@
 <div class="centerColumn" id="accountEditDefault">
 	<?php echo zen_draw_form ('oneallsociallogin', zen_href_link ('oneallsociallogin'), 'post') . zen_draw_hidden_field ('action', 'process'); ?>
 		<?php if ($messageStack->size ('oneallsociallogin') > 0) echo $messageStack->output ('oneallsociallogin'); ?>
-		<h2><?php echo sprintf (OASL_CONNECTED_WITH, $user_data ['identity_provider']); ?></h1>
+		<h2><?php echo sprintf (OASL_CONNECTED_WITH, $user_data ['identity_provider']); ?></h2>
 		<p>
 			<?php echo OASL_TAKE_MINUTE_TO_REVIEW; ?>
 			<?php echo sprintf (OASL_READY_FOR, $user_data ['identity_provider']); ?>
@@ -68,7 +68,7 @@
 			<br class="clearBoth" />
 
 			<?php
-				if (ACCOUNT_DOB == 'true')
+				if (defined ('ACCOUNT_DOB') AND ACCOUNT_DOB == 'true')
 				{
 					?>
 						<label class="inputLabel" for="dob"><?php echo ENTRY_DATE_OF_BIRTH; ?></label>
@@ -94,6 +94,44 @@
 				echo zen_draw_input_field ('telephone', $telephone, 'id="telephone"') . (zen_not_null (ENTRY_TELEPHONE_NUMBER_TEXT) ? '<span class="alert">' . ENTRY_TELEPHONE_NUMBER_TEXT . '</span>' : '');
 			?>
 			<br class="clearBoth" />
+		</fieldset>
+
+		<fieldset>
+			<legend><?php echo TABLE_HEADING_ADDRESS_DETAILS; ?></legend>
+			<label class="inputLabel" for="street-address"><?php echo ENTRY_STREET_ADDRESS; ?></label>
+			<?php
+				$street_address = (!empty ($user_data ['user_street_address']) ? $user_data ['user_street_address'] : '');
+				echo zen_draw_input_field('street_address', $street_address, 'id="street-address"') . (zen_not_null(ENTRY_STREET_ADDRESS_TEXT) ? '<span class="alert">' . ENTRY_STREET_ADDRESS_TEXT . '</span>': '');
+			?>
+			<br class="clearBoth" />
+
+			<?php
+				if (defined ('ACCOUNT_SUBURB') && ACCOUNT_SUBURB == 'true')
+				{
+					?>
+						<label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>
+						<?php
+							$suburb = (!empty ($user_data ['user_suburb']) ? $user_data ['user_suburb'] : '');
+							echo zen_draw_input_field('suburb', '', ' id="suburb"') . (zen_not_null(ENTRY_SUBURB_TEXT) ? '<span class="alert">' . ENTRY_SUBURB_TEXT . '</span>': '');
+						?>
+						<br class="clearBoth" />
+					<?php
+  			}
+			?>
+
+			<label class="inputLabel" for="postcode"><?php echo ENTRY_POST_CODE; ?></label>
+			<?php
+				$postcode = (!empty ($user_data ['user_postcode']) ? $user_data ['user_postcode'] : '');
+				echo zen_draw_input_field('postcode', $postcode, 'id="postcode"') . (zen_not_null(ENTRY_POST_CODE_TEXT) ? '<span class="alert">' . ENTRY_POST_CODE_TEXT . '</span>': '');
+			?>
+			<br class="clearBoth" />
+
+			<label class="inputLabel" for="city"><?php echo ENTRY_CITY; ?></label>
+			<?php
+				$city = (!empty ($user_data ['user_city']) ? $user_data ['user_city'] : '');
+				echo zen_draw_input_field('city', $city, ' id="city"') . (zen_not_null(ENTRY_CITY_TEXT) ? '<span class="alert">' . ENTRY_CITY_TEXT . '</span>': '');
+			?>
+			<br class="clearBoth" />
 
 			<label class="inputLabel" for="country"><?php echo ENTRY_COUNTRY; ?></label>
 			<?php
@@ -101,6 +139,36 @@
 				echo zen_get_country_list('country_id', $country, 'id="country" ') . (zen_not_null(ENTRY_COUNTRY_TEXT) ? '<span class="alert">' . ENTRY_COUNTRY_TEXT . '</span>': '');
 			?>
 			<br class="clearBoth" />
+
+			<?php
+				if (ACCOUNT_STATE == 'true')
+				{
+					if ($user_data['show_pulldown_states'] == true)
+					{
+						?>
+							<label class="inputLabel" for="stateZone" id="zoneLabel"><?php echo ENTRY_STATE; ?></label>
+						<?php
+							$selected_country = (!empty ($user_data ['user_selected_country_id']) ? $user_data ['user_selected_country_id'] : '');
+							$zone_id = (!empty ($user_data ['user_zone_id']) ? $user_data ['user_zone_id'] : false);
+							echo zen_draw_pull_down_menu('zone_id', zen_prepare_country_zones_pull_down($selected_country), $zone_id, 'id="stateZone"');
+						?>
+							&nbsp;<span class="alert"><?php echo ENTRY_STATE_TEXT; ?></span>
+							<br class="clearBoth" id="stBreak" />
+						<?php
+					}
+					else
+					{
+						?>
+							<label class="inputLabel" for="state" id="stateLabel"><?php echo ENTRY_STATE; ?></label>
+						<?php
+							$state = (!empty ($user_data ['user_state']) ? $user_data ['user_state'] : '');
+    					echo zen_draw_input_field('state', $state, zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_state', '40') . ' id="state"');
+    				?>
+    					<br class="clearBoth" id="stBreak" />
+    				<?php
+					}
+				}
+			?>
 
 		</fieldset>
 		<div class="buttonRow forward"><?php echo zen_image_submit (BUTTON_IMAGE_UPDATE, BUTTON_UPDATE_ALT); ?></div>

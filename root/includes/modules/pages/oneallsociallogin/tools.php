@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   	OneAll Social Login
- * @copyright 	Copyright 2013 http://www.oneall.com - All rights reserved.
+ * @copyright 	Copyright 2012 http://www.oneall.com - All rights reserved.
  * @license   	GNU/GPL 2 or later
  *
  * This program is free software; you can redistribute it and/or
@@ -34,6 +34,8 @@ if ( ! class_exists('oneallsociallogin_tools'))
 {
 	class oneallsociallogin_tools
 	{
+		const SOCIAL_LOGIN_VERSION = '1.3';
+
 		/**
 		* Logs a given customer in.
 		*/
@@ -150,10 +152,16 @@ if ( ! class_exists('oneallsociallogin_tools'))
 					// Prepare address data.
 					$address_data = array(
 						'customers_id' => $customers_id,
+						'entry_gender' => ( ! empty ($user_data ['user_gender']) ? $user_data ['user_gender'] : ''),
+						'entry_firstname' => ( ! empty ($user_data ['user_first_name']) ? $user_data ['user_first_name'] : ''),
+						'entry_lastname' => ( ! empty ($user_data ['user_last_name']) ? $user_data ['user_last_name'] : ''),
+						'entry_street_address' => ( ! empty ($user_data ['user_street_address']) ? $user_data ['user_street_address'] : ''),
+						'entry_suburb' => ( ! empty ($user_data ['user_suburb']) ? $user_data ['user_suburb'] : ''),
+						'entry_postcode' => ( ! empty ($user_data ['user_postcode']) ? $user_data ['user_postcode'] : ''),
+						'entry_city' => ( ! empty ($user_data ['user_city']) ? $user_data ['user_city'] : ''),
+						'entry_state' => ( ! empty ($user_data ['user_state']) ? $user_data ['user_state'] : ''),
 						'entry_country_id' => (! empty ($user_data ['user_country_id']) ? $user_data ['user_country_id'] : 1),
-						'entry_firstname' => $user_data ['user_first_name'],
-						'entry_lastname' => $user_data ['user_last_name'],
-						'entry_gender' => ( ! empty ($user_data ['user_gender']) ? $user_data ['user_gender'] : '')
+						'entry_zone_id' => (! empty ($user_data ['user_zone_id']) ? $user_data ['user_zone_id'] : 0),
 					);
 
 					// Add address.
@@ -523,8 +531,8 @@ if ( ! class_exists('oneallsociallogin_tools'))
 					// Birthdate - ZenCart expects MM/DD/YYYY
 					if (!empty ($identity->birthday) && preg_match ('/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/', $identity->birthday, $matches))
 					{
-						$data ['user_birthdate'] = str_pad ($matches [2], 2, '0', STR_PAD_LEFT);
-						$data ['user_birthdate'] .= '/'. str_pad ($matches [1], 2, '0', STR_PAD_LEFT);
+						$data ['user_birthdate'] = str_pad ($matches [1], 2, '0', STR_PAD_LEFT);
+						$data ['user_birthdate'] .= '/'. str_pad ($matches [2], 2, '0', STR_PAD_LEFT);
 						$data ['user_birthdate'] .= '/' . str_pad ($matches [3], 4, '0', STR_PAD_LEFT);
 					}
 					else
@@ -684,7 +692,7 @@ if ( ! class_exists('oneallsociallogin_tools'))
 			curl_setopt ($curl, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt ($curl, CURLOPT_SSL_VERIFYPEER, 0);
 			curl_setopt ($curl, CURLOPT_SSL_VERIFYHOST, 0);
-			curl_setopt ($curl, CURLOPT_USERAGENT, 'SocialLogin PrestaShop (+http://www.oneall.com/)');
+			curl_setopt ($curl, CURLOPT_USERAGENT, 'SocialLogin '.self::SOCIAL_LOGIN_VERSION.' ZenCart (+http://www.oneall.com/)');
 
 			// BASIC AUTH?
 			if (isset ($options ['api_key']) AND isset ($options ['api_secret']))
@@ -770,7 +778,7 @@ if ( ! class_exists('oneallsociallogin_tools'))
 			//Create HTTP request
 			$defaults = array (
 				'Host' => "Host: $host",
-				'User-Agent' => 'User-Agent: SocialLogin PrestaShop (+http://www.oneall.com/)'
+				'User-Agent' => 'User-Agent: SocialLogin '.self::SOCIAL_LOGIN_VERSION.' ZenCart (+http://www.oneall.com/)'
 			);
 
 			// BASIC AUTH?
