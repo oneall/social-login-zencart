@@ -29,12 +29,15 @@
  *
  */
 
+define ('SOCIAL_LOGIN_VERSION', '1.3');
+define ('SOCIAL_LOGIN_USERAGENT', 'SocialLogin/' . SOCIAL_LOGIN_VERSION . ' ZenCart/1.5.x (+http://www.oneall.com/)');
+
+
 //OneAll Social Login Toolbox
 if ( ! class_exists('oneallsociallogin_tools'))
 {
 	class oneallsociallogin_tools
 	{
-		const SOCIAL_LOGIN_VERSION = '1.3';
 
 		/**
 		* Logs a given customer in.
@@ -692,7 +695,7 @@ if ( ! class_exists('oneallsociallogin_tools'))
 			curl_setopt ($curl, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt ($curl, CURLOPT_SSL_VERIFYPEER, 0);
 			curl_setopt ($curl, CURLOPT_SSL_VERIFYHOST, 0);
-			curl_setopt ($curl, CURLOPT_USERAGENT, 'SocialLogin '.self::SOCIAL_LOGIN_VERSION.' ZenCart (+http://www.oneall.com/)');
+			curl_setopt ($curl, CURLOPT_USERAGENT, SOCIAL_LOGIN_USERAGENT);
 
 			// BASIC AUTH?
 			if (isset ($options ['api_key']) AND isset ($options ['api_secret']))
@@ -778,7 +781,7 @@ if ( ! class_exists('oneallsociallogin_tools'))
 			//Create HTTP request
 			$defaults = array (
 				'Host' => "Host: $host",
-				'User-Agent' => 'User-Agent: SocialLogin '.self::SOCIAL_LOGIN_VERSION.' ZenCart (+http://www.oneall.com/)'
+				'User-Agent' => 'User-Agent: ' . SOCIAL_LOGIN_USERAGENT
 			);
 
 			// BASIC AUTH?
