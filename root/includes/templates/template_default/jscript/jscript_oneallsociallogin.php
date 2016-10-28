@@ -29,12 +29,10 @@
  *
  */
 
-
 // Read config
 $query = "SELECT `data` AS subdomain FROM " . TABLE_ONEALLSOCIALLOGIN_CONFIG . " WHERE `tag`='api_subdomain' LIMIT 1";
 $oasl_config = $db->Execute ($query);
 
-echo $query;
 //Display libary if subdomain found
 if (!empty ($oasl_config->fields ['subdomain']))
 {

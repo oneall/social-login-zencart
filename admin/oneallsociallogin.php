@@ -143,6 +143,23 @@ if (!empty ($_POST ['oasl_action']) AND $_POST ['oasl_action'] == 'autodetect_ap
 }
 
 /**
+ * Make sure the installer has been ran
+ */
+$query = "SHOW TABLES LIKE '".TABLE_ONEALLSOCIALLOGIN_CONFIG."'";
+$rows = $db->Execute ($query);
+if ($rows->recordCount() == 0)
+{
+	?>
+		<h2>Error</h2>
+		<p>Social Login has not been installed.<br />Please run the <a href="../oneallsociallogin_install.php">installation script</a> first.</p>
+	<?php
+	
+	exit();
+}
+
+
+
+/**
  * Show Admin Area
  */
 

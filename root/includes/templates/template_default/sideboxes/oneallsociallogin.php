@@ -63,11 +63,13 @@ $oasl_sidebox_node = 'oneall_social_login_providers_' . mt_rand (10000, 99999);
 $title = $oasl_sidebox_title;
 
 $content = <<<HEREDOC
-	<div class="oneall_social_login_providers" id="$oasl_sidebox_node"></div>
-	<script type="text/javascript">
-		var _oneall = _oneall || [];
-		_oneall.push(['social_login', 'set_providers', ['$oasl_sidebox_providers']]);
-		_oneall.push(['social_login', 'set_callback_uri', '$oasl_sidebox_callback' + encodeURIComponent(window.location.href)]);
-		_oneall.push(['social_login', 'do_render_ui', '$oasl_sidebox_node']);
-	</script>
+	<div class="sideBoxContent">
+		<div class="oneall_social_login_providers" id="$oasl_sidebox_node"></div>
+		<script type="text/javascript">
+			var _oneall = _oneall || [];
+			_oneall.push(['social_login', 'set_providers', ['$oasl_sidebox_providers']]);
+			_oneall.push(['social_login', 'set_callback_uri', '$oasl_sidebox_callback' + encodeURIComponent(window.location.href)]);
+			_oneall.push(['social_login', 'do_render_ui', '$oasl_sidebox_node']);
+		</script>
+	</div>
 HEREDOC;
