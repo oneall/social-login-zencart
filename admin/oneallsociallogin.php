@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   	OneAll Social Login
- * @copyright 	Copyright 2012 http://www.oneall.com - All rights reserved.
+ * @copyright 	Copyright 2011-2016 http://www.oneall.com - All rights reserved.
  * @license   	GNU/GPL 2 or later
  *
  * This program is free software; you can redistribute it and/or
@@ -426,4 +426,6 @@ if (!empty ($_POST ['oasl_action']) AND $_POST ['oasl_action'] == 'save_settings
 	<br />
 	</body>
 </html>
-<?php require(DIR_WS_INCLUDES . 'application_bottom.php'); ?>
+<?php 
+
+require(DIR_WS_INCLUDES . 'application_bottom.php'); 

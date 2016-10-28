@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   	OneAll Social Login
- * @copyright 	Copyright 2012 http://www.oneall.com - All rights reserved.
+ * @copyright 	Copyright 2011-2016 http://www.oneall.com - All rights reserved.
  * @license   	GNU/GPL 2 or later
  *
  * This program is free software; you can redistribute it and/or
@@ -33,7 +33,9 @@
 <div class="centerColumn" id="accountEditDefault">
 	<?php echo zen_draw_form ('oneallsociallogin', zen_href_link ('oneallsociallogin'), 'post') . zen_draw_hidden_field ('action', 'process'); ?>
 		<?php if ($messageStack->size ('oneallsociallogin') > 0) echo $messageStack->output ('oneallsociallogin'); ?>
-		<h2><?php echo sprintf (OASL_CONNECTED_WITH, $user_data ['identity_provider']); ?></h2>
+		<h2>
+			<?php echo sprintf (OASL_CONNECTED_WITH, $user_data ['identity_provider']); ?>
+		</h2>
 		<p>
 			<?php echo OASL_TAKE_MINUTE_TO_REVIEW; ?>
 			<?php echo sprintf (OASL_READY_FOR, $user_data ['identity_provider']); ?>

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   	OneAll Social Login
- * @copyright 	Copyright 2012 http://www.oneall.com - All rights reserved.
+ * @copyright 	Copyright 2011-2016 http://www.oneall.com - All rights reserved.
  * @license   	GNU/GPL 2 or later
  *
  * This program is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@
  *
  */
 
-define ('SOCIAL_LOGIN_VERSION', '1.3');
+define ('SOCIAL_LOGIN_VERSION', '1.5');
 define ('SOCIAL_LOGIN_USERAGENT', 'SocialLogin/' . SOCIAL_LOGIN_VERSION . ' ZenCart/1.5.x (+http://www.oneall.com/)');
 
 
@@ -38,7 +38,6 @@ if ( ! class_exists('oneallsociallogin_tools'))
 {
 	class oneallsociallogin_tools
 	{
-
 		/**
 		* Logs a given customer in.
 		*/
@@ -827,12 +826,34 @@ if ( ! class_exists('oneallsociallogin_tools'))
 		 */
 		public static function get_current_url ()
 		{
-			//Get request URI - Should work on Apache + IIS
-			$request_uri = ((!isset ($_SERVER ['REQUEST_URI'])) ? $_SERVER ['PHP_SELF'] : $_SERVER ['REQUEST_URI']);
-			$request_port = ((!empty ($_SERVER ['SERVER_PORT']) AND $_SERVER ['SERVER_PORT'] <> '80') ? (":" . $_SERVER ['SERVER_PORT']) : '');
-			$request_protocol = (self::is_https_on () ? 'https' : 'http') . "://";
-			$redirect_to = $request_protocol . $_SERVER ['HTTP_HOST'] . $request_port . $request_uri;
-			return $redirect_to;
+			//Extract parts
+			$request_uri = (isset ($_SERVER ['REQUEST_URI']) ? $_SERVER ['REQUEST_URI'] : $_SERVER ['PHP_SELF']);
+			$request_protocol = (self::is_https_on () ? 'https' : 'http');
+			$request_host = (isset ($_SERVER ['HTTP_X_FORWARDED_HOST']) ? $_SERVER ['HTTP_X_FORWARDED_HOST'] : (isset ($_SERVER ['HTTP_HOST']) ? $_SERVER ['HTTP_HOST'] : $_SERVER ['SERVER_NAME']));
+			
+			//Port of this request
+			$request_port = '';
+			
+			//We are using a proxy
+			if (isset ($_SERVER ['HTTP_X_FORWARDED_PORT']))
+			{
+				// SERVER_PORT is usually wrong on proxies, don't use it!
+				$request_port = intval ($_SERVER ['HTTP_X_FORWARDED_PORT']);
+			}
+			//Does not seem like a proxy
+			elseif (isset ($_SERVER ['SERVER_PORT']))
+			{
+				$request_port = intval ($_SERVER ['SERVER_PORT']);
+			}
+			
+			// Remove standard ports
+			$request_port = (!in_array ($request_port, array (80, 443)) ? $request_port : '');
+			
+			//Build url
+			$current_url = $request_protocol . '://' . $request_host . ( ! empty ($request_port) ? (':'.$request_port) : '') . $request_uri;
+			
+			//Done
+			return $current_url;
 		}
 
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   	OneAll Social Login
- * @copyright 	Copyright 2012 http://www.oneall.com - All rights reserved.
+ * @copyright 	Copyright 2011-2016 http://www.oneall.com - All rights reserved.
  * @license   	GNU/GPL 2 or later
  *
  * This program is free software; you can redistribute it and/or
@@ -23,26 +23,22 @@
  *
  */
 
-
 /**
- *
  * SIDEBOX SETUP
- *
  */
 
-//The sidebox is only displayed if the user is not logged in
-if (empty ($_SESSION ['customer_id']) AND ! defined ('DISABLE_ONEALLSOCIALLOGIN'))
+// The sidebox is only displayed if the user is not logged in
+if (empty ($_SESSION ['customer_id']) and !defined ('DISABLE_ONEALLSOCIALLOGIN'))
 {
-	//Sidebox Start
+	// Sidebox Start
 	$zco_notifier->notify ('NOTIFY_START_ONEALLSOCIALLOGIN_SIDEBOX');
-
-	//Include Sidebox
-	require($template->get_template_dir ('oneallsociallogin.php', DIR_WS_TEMPLATE, $current_page_base, 'sideboxes') . '/oneallsociallogin.php');
-
-	//SideBox end
+	
+	// Include Sidebox
+	require ($template->get_template_dir ('oneallsociallogin.php', DIR_WS_TEMPLATE, $current_page_base, 'sideboxes') . '/oneallsociallogin.php');
+	
+	// SideBox end
 	$zco_notifier->notify ('NOTIFY_END_ONEALLSOCIALLOGIN_SIDEBOX');
-
-	//Show Template
-	require($template->get_template_dir ($column_box_default, DIR_WS_TEMPLATE, $current_page_base, 'common') . '/' . $column_box_default);
+	
+	// Show Template
+	require ($template->get_template_dir ($column_box_default, DIR_WS_TEMPLATE, $current_page_base, 'common') . '/' . $column_box_default);
 }
-?>

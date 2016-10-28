@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   	OneAll Social Login
- * @copyright 	Copyright 2012 http://www.oneall.com - All rights reserved.
+ * @copyright 	Copyright 2011-2016 http://www.oneall.com - All rights reserved.
  * @license   	GNU/GPL 2 or later
  *
  * This program is free software; you can redistribute it and/or
@@ -43,5 +43,3 @@ if (function_exists ('zen_register_admin_page'))
 		zen_register_admin_page ('oneallsociallogin', 'BOX_CONFIGURATION_ONEALLSOCIALOGIN', 'FILENAME_CONFIGURATION_ONEALLSOCIALOGIN', '', 'tools', 'Y', 20);
 	}
 }
-
-?>

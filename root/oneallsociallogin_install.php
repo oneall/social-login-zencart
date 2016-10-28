@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   	OneAll Social Login
- * @copyright 	Copyright 2012 http://www.oneall.com - All rights reserved.
+ * @copyright 	Copyright 2011-2016 http://www.oneall.com - All rights reserved.
  * @license   	GNU/GPL 2 or later
  *
  * This program is free software; you can redistribute it and/or
@@ -31,7 +31,6 @@
  */
 require('includes/application_top.php');
 
-
 //Define tables
 if (!defined ('TABLE_ONEALLSOCIALLOGIN'))
 {
@@ -43,35 +42,100 @@ if (!defined ('TABLE_ONEALLSOCIALLOGIN'))
 
 // Available providers
 $providers = array (
-	'facebook' => 'Facebook',
-	'twitter' => 'Twitter',
-	'google' => 'Google',
-	'linkedin' => 'LinkedIn',
-	'xing' => 'Xing',
-	'yahoo' => 'Yahoo',
-	'github' => 'Github.com',
-	'foursquare' => 'Foursquare',
-	'youtube' => 'YouTube',
-	'skyrock' => 'Skyrock.com',
-	'openid' => 'OpenID',
-	'wordpress' => 'Wordpress.com',
-	'hyves' => 'Hyves',
-	'paypal' => 'PayPal',
-	'livejournal' => 'LiveJournal',
-	'steam' => 'Steam Community',
-	'windowslive' => 'Windows Live',
-	'blogger' => 'Blogger',
-	'disqus' => 'Disqus',
-	'stackexchange' => 'StackExchange',
-	'vkontakte' => 'VKontakte',
-	'odnoklassniki' => 'Odnoklassniki.ru',
-	'mailru' => 'Mail.ru'
+	'amazon' => 'Amazon',
+	'battlenet'=> 'Battle.net',
+	'blogger'=> 'Blogger',
+	'disqus'=> 'Disqus',
+	'dribbble'=> 'Dribbble',
+	'facebook'=> 'Facebook',
+	'foursquare'=> 'Foursquare',
+	'github'=> 'Github.com',
+	'google'=> 'Google',
+	'instagram'=> 'Instagram',
+	'linkedin'=> 'LinkedIn',
+	'livejournal'=> 'LiveJournal',
+	'mailru'=> 'Mail.ru',
+	'odnoklassniki'=> 'Odnoklassniki',
+	'openid'=> 'OpenID',
+	'paypal'=> 'PayPal',
+	'pinterest'=> 'Pinterest',
+	'pixelpin'=> 'PixelPin',
+	'reddit'=> 'Reddit',
+	'skyrock'=> 'Skyrock.com',
+	'stackexchange'=> 'StackExchange',
+	'steam'=> 'Steam',
+	'twitch'=> 'Twitch.tv',
+	'twitter'=> 'Twitter',
+	'vimeo'=> 'Vimeo',
+	'vkontakte'=> 'VKontakte',
+	'windowslive'=> 'Windows Live',
+	'wordpress'=> 'WordPress.com',
+	'yahoo'=> 'Yahoo',
+	'youtube'=> 'YouTube'
 );
 
 // Output
 $messages = array ();
 
-// Cleanup layout_boxes
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// TEMPLATES
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// This is the default template directory
+$default_template_dir = 'includes/templates/template_default/';
+
+// This is the current template directory
+$current_template_dir = DIR_WS_TEMPLATE;
+
+// Overwrite existing files?
+$replace_templates = true;
+
+// Make sure the template directory actually exists
+if ( ! empty ($current_template_dir) && is_dir ($current_template_dir))
+{
+	// Copy the files	
+	if ($default_template_dir <> $current_template_dir)
+	{
+		// These are the files that we need to copy
+		$files = array ();
+		$files[] = 'jscript/jscript_oneallsociallogin.php';
+		$files[] = 'sideboxes/oneallsociallogin.php';
+		$files[] = 'templates/tpl_oneallsociallogin_default.php';
+			
+		// Debug
+		$messages [] = "Default template directory [".$default_template_dir."]";
+		$messages [] = "Current template directory [".$current_template_dir."]";
+	
+		// Loop through files	
+		foreach ($files AS $file)
+		{
+			// Make sure the file exists
+			if (file_exists ($default_template_dir.$file))
+			{
+				// Copy it to the template directory
+				if ( ! file_exists ($current_template_dir.$file) || $replace_templates)
+				{
+					if (copy($default_template_dir.$file, $current_template_dir.$file))
+					{
+						$messages [] = "Copying template file to [".$current_template_dir.$file."]";
+					}
+					else
+					{
+						$messages [] = "ERROR! Please manually copy the file [".$default_template_dir.$file."] to [".$current_template_dir.$file."]";
+					}
+				}
+				else
+				{
+					$messages [] = "ERROR! Template file missing [".$default_template_dir.$file."] Please re-upload the plugin";
+				}
+			}
+		}	
+	}
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// LAYOUT BOXES
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 $sql = "SELECT `layout_id` FROM " . TABLE_LAYOUT_BOXES . " WHERE `layout_box_name` = 'oneallsociallogin.php'";
 $rows = $db->Execute ($sql);
 while (!$rows->EOF)
@@ -85,13 +149,37 @@ while (!$rows->EOF)
 	$rows->MoveNext ();
 }
 
-// Add entry to layout_boxes
-$sql = "INSERT INTO " . TABLE_LAYOUT_BOXES . " SET `layout_template` = 'classic', `layout_box_name` = 'oneallsociallogin.php', `layout_box_status` = 1, `layout_box_location` = 1, `layout_box_sort_order` = -1, `layout_box_sort_order_single` = 2, `layout_box_status_single` = 1";
-$result = $db->Execute ($sql);
-$messages [] = "Database entry [" . TABLE_LAYOUT_BOXES . ":" . $db->Insert_ID () . "] added";
+// Defaults layouts for the sidebox
+$layout_templates = array ('classic');
 
+// Read available layouts
+$sql = "SELECT DISTINCT(layout_template) AS layout_template FROM " . TABLE_LAYOUT_BOXES;
+$rows = $db->Execute ($sql);
+while (!$rows->EOF)
+{
+	$layout_template = $rows->fields ['layout_template'];
+	
+	// This is to prevent re-adding the default layouts
+	if ( ! in_array ($layout_template, $layout_templates))
+	{
+		$layout_templates[] =  $layout_template;
+	}
+	
+	// Goto next row
+	$rows->MoveNext ();
+}
 
-// Cleanup admin_pages
+// Add entry to layout_boxes 
+foreach ($layout_templates AS $layout_template)
+{
+	$sql = "INSERT INTO " . TABLE_LAYOUT_BOXES . " SET `layout_template` = '".$layout_template."', `layout_box_name` = 'oneallsociallogin.php', `layout_box_status` = 1, `layout_box_location` = 1, `layout_box_sort_order` = -1, `layout_box_sort_order_single` = 2, `layout_box_status_single` = 1";
+	$result = $db->Execute ($sql);
+	$messages [] = "Database entry [" . TABLE_LAYOUT_BOXES . ":" . $db->Insert_ID () . "] added, layout [".$layout_template."]";
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ADMIN PAGES
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 $sql = "SELECT `page_key` FROM " . TABLE_ADMIN_PAGES . " WHERE `page_key` = 'configOneallSocialLoginSettings'";
 $rows = $db->Execute ($sql);
 while (!$rows->EOF)
@@ -115,17 +203,26 @@ $sql = "INSERT INTO " . TABLE_ADMIN_PAGES . " SET `page_key` = 'configOneallSoci
 $result = $db->Execute ($sql);
 $messages [] = "Database entry [" . TABLE_ADMIN_PAGES . ":configOneallSocialLoginSettings] added";
 
-//Add user table
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// USER
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 $sql = "CREATE TABLE IF NOT EXISTS " . TABLE_ONEALLSOCIALLOGIN_USER . " (`oasl_user_id` int(11) unsigned NOT NULL AUTO_INCREMENT, `customers_id` int(11) unsigned NOT NULL, `user_token` varchar(48) NOT NULL, PRIMARY KEY (`oasl_user_id`))";
 $result = $db->Execute ($sql);
 $messages [] = "Database table [" . TABLE_ONEALLSOCIALLOGIN_USER . "] added";
 
-// Add identity table
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// IDENTITY
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 $sql = "CREATE TABLE IF NOT EXISTS " . TABLE_ONEALLSOCIALLOGIN_IDENTITY . " (`oasl_identity_id` int(11) unsigned NOT NULL AUTO_INCREMENT, `oasl_user_id` int(11) unsigned NOT NULL, `identity_token` varchar(48) NOT NULL, `identity_provider` varchar(64) NOT NULL, `num_logins` int(10) unsigned NOT NULL, PRIMARY KEY (`oasl_identity_id`))";
 $result = $db->Execute ($sql);
 $messages [] = "Database table [" . TABLE_ONEALLSOCIALLOGIN_IDENTITY . "] added";
 
-// Add config table
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// CONFIG
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 $sql = "CREATE TABLE IF NOT EXISTS " . TABLE_ONEALLSOCIALLOGIN_CONFIG . " (`oasl_config_id` int(11) unsigned NOT NULL AUTO_INCREMENT, `tag` varchar(32) NOT NULL, `data` text NOT NULL, PRIMARY KEY (`oasl_config_id`), UNIQUE KEY `tag` (`tag`))";
 $result = $db->Execute ($sql);
 $messages [] = "Database table [" . TABLE_ONEALLSOCIALLOGIN_CONFIG . "] added";

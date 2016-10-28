@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   	OneAll Social Login
- * @copyright 	Copyright 2012 http://www.oneall.com - All rights reserved.
+ * @copyright 	Copyright 2011-2016 http://www.oneall.com - All rights reserved.
  * @license   	GNU/GPL 2 or later
  *
  * This program is free software; you can redistribute it and/or
@@ -31,20 +31,22 @@
 
 
 // Read config
-$query = "SELECT `data` FROM " . TABLE_ONEALLSOCIALLOGIN_CONFIG . " WHERE `tag`='api_subdomain' LIMIT 1";
+$query = "SELECT `data` AS subdomain FROM " . TABLE_ONEALLSOCIALLOGIN_CONFIG . " WHERE `tag`='api_subdomain' LIMIT 1";
 $oasl_config = $db->Execute ($query);
 
+echo $query;
 //Display libary if subdomain found
-if (!empty ($oasl_config->fields ['data']))
+if (!empty ($oasl_config->fields ['subdomain']))
 {
-?>
-	<!-- OneAl Social Login | http://www.oneall.com/ -->
+	?>
+	<!-- OneAll Social Login | http://www.oneall.com/ -->
 	<script type="text/javascript">
-		var oneall_subdomain = '<?php echo $oasl_config->fields ['data']; ?>';
-		var oneall_js_protocol = (("https:" == document.location.protocol) ? "https" : "http");
-		document.write(unescape("%3Cscript src='"+oneall_js_protocol+"://"+oneall_subdomain+".api.oneall.com/socialize/library.js' type='text/javascript'%3E%3C/script%3E"));
+		var oneall_subdomain = '<?php echo $oasl_config->fields ['subdomain']; ?>';
+		var oa = document.createElement('script');
+		oa.type = 'text/javascript'; oa.async = true;
+		oa.src = '//' + oneall_subdomain + '.api.oneall.com/socialize/library.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(oa, s);		
 	</script>
-<?php
+	<?php
 }
-
-?>

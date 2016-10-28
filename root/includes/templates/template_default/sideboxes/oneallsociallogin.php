@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   	OneAll Social Login
- * @copyright 	Copyright 2012 http://www.oneall.com - All rights reserved.
+ * @copyright 	Copyright 2011-2016 http://www.oneall.com - All rights reserved.
  * @license   	GNU/GPL 2 or later
  *
  * This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@
 $oasl_config = array ();
 
 // Read config
-$query = "SELECT `tag`,`data` FROM " . TABLE_ONEALLSOCIALLOGIN_CONFIG;
+$query = "SELECT `tag`, `data` FROM " . TABLE_ONEALLSOCIALLOGIN_CONFIG;
 $rows = $db->Execute ($query);
 while (!$rows->EOF)
 {
@@ -55,21 +55,19 @@ if (!empty ($oasl_config ['enabled_providers']))
 
 //Setup parameters
 $oasl_sidebox_title = (!empty ($oasl_config ['sidebox_title']) ? $oasl_config ['sidebox_title'] : '');
-$oasl_sidebox_rand = mt_rand (10000, 99999);
 $oasl_sidebox_providers = implode ("','", $oasl_enabled_providers);
 $oasl_sidebox_callback = zen_href_link ('oneallsociallogin', 'origin=');
+$oasl_sidebox_node = 'oneall_social_login_providers_' . mt_rand (10000, 99999);
 
 //Setup sidebox
 $title = $oasl_sidebox_title;
+
 $content = <<<HEREDOC
-	<div class="oneall_social_login_providers" id="oneall_social_login_providers_$oasl_sidebox_rand"></div>
+	<div class="oneall_social_login_providers" id="$oasl_sidebox_node"></div>
 	<script type="text/javascript">
-		oneall.api.plugins.social_login.build("oneall_social_login_providers_{$oasl_sidebox_rand}", {
-			"providers": ['$oasl_sidebox_providers'],
-			"callback_uri": '$oasl_sidebox_callback' + encodeURIComponent(window.location.href),
-		});
+		var _oneall = _oneall || [];
+		_oneall.push(['social_login', 'set_providers', ['$oasl_sidebox_providers']]);
+		_oneall.push(['social_login', 'set_callback_uri', '$oasl_sidebox_callback' + encodeURIComponent(window.location.href)]);
+		_oneall.push(['social_login', 'do_render_ui', '$oasl_sidebox_node']);
 	</script>
 HEREDOC;
-
-
-?>
