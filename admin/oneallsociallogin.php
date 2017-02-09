@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   	OneAll Social Login
- * @copyright 	Copyright 2011-2016 http://www.oneall.com - All rights reserved.
+ * @copyright 	Copyright 2011-2017 http://www.oneall.com
  * @license   	GNU/GPL 2 or later
  *
  * This program is free software; you can redistribute it and/or
@@ -184,6 +184,7 @@ $api_key = (isset ($oasl_config ['api_key']) ? $oasl_config ['api_key'] : '');
 $api_secret = (isset ($oasl_config ['api_secret']) ? $oasl_config ['api_secret'] : '');
 $api_connection_handler = ((isset ($oasl_config ['api_connection_handler']) AND $oasl_config ['api_connection_handler'] == 'fsockopen') ? 'fsockopen' : 'curl');
 $api_connection_protocol = ((isset ($oasl_config ['api_connection_protocol']) AND $oasl_config ['api_connection_protocol'] == 'http') ? 'http' : 'https');
+$sidebox_title = (isset ($oasl_config ['sidebox_title']) ? $oasl_config ['sidebox_title'] : '');
 
 //Compute enabled providers
 $enabled_providers = array ();
@@ -240,6 +241,11 @@ if (!empty ($_POST ['oasl_action']) AND $_POST ['oasl_action'] == 'save_settings
 	$sql = "INSERT INTO " . TABLE_ONEALLSOCIALLOGIN_CONFIG . " SET `tag`='api_connection_protocol', `data`='" . zen_db_input ($api_connection_protocol) . "' ON DUPLICATE KEY UPDATE `data`='" .  zen_db_input ($api_connection_protocol) . "'";
 	$result = $db->Execute ($sql);
 
+	// Title
+	$sidebox_title = (isset ($_POST ['sidebox_title']) ? trim ($_POST ['sidebox_title']) : '');
+	$sql = "INSERT INTO " . TABLE_ONEALLSOCIALLOGIN_CONFIG . " SET `tag`='sidebox_title', `data`='" . zen_db_input ($sidebox_title) . "' ON DUPLICATE KEY UPDATE `data`='" .  zen_db_input ($sidebox_title) . "'";
+	$result = $db->Execute ($sql);
+	
 	//Providers
 	if (isset ($_POST['providers']) AND is_array ($_POST['providers']))
 	{
@@ -297,6 +303,26 @@ if (!empty ($_POST ['oasl_action']) AND $_POST ['oasl_action'] == 'save_settings
       			</tr>
       			<tr>
       				<td class="formAreaTitle">
+      					Notice
+      				</td>
+      			</tr>
+      			<tr>
+      				<td class="formArea">
+      					<table border="0" cellspacing="2" cellpadding="2">
+      						<tr>
+      						 	<td class="main">
+     						 		Per default Social Login will be added to the sidebar of your shop. If your shop does not have a sidebar, then our <a href="http://docs.oneall.loc/plugins/guide/social-login-zen-cart/#3b" target="_blank">documentation</a> will help you manually add the social login icons to any other location.
+      						 	</td>
+      						</tr>
+      					</table>
+      				</td>
+      			</tr>
+      			<tr>
+      				<td><br /><br /></td>
+      			</tr> 	
+      						 	
+      			<tr>
+      				<td class="formAreaTitle">
       					API Connection
       				</td>
       			</tr>
@@ -304,7 +330,7 @@ if (!empty ($_POST ['oasl_action']) AND $_POST ['oasl_action'] == 'save_settings
       				<td class="formArea">
       					<table border="0" cellspacing="2" cellpadding="2">
       						<tr>
-      						 	<td class="main" style="width:150px">API Connection Handler:</td>
+      						 	<td class="main" style="width:170px">API Connection Handler:</td>
       						 	<td class="main">
 	      						 	<?php
 									  		 echo zen_draw_radio_field ('api_connection_handler', 'curl', ($api_connection_handler <> 'fsockopen'), '', 'id="api_connection_handler_curl"');
@@ -318,7 +344,7 @@ if (!empty ($_POST ['oasl_action']) AND $_POST ['oasl_action'] == 'save_settings
 										</td>
       						 </tr>
       						 <tr>
-      							<td class="main" style="width:150px">
+      							<td class="main" style="width:170px">
       								API Connection Protocol:
       							</td>
       						 	<td class="main">
@@ -344,13 +370,13 @@ if (!empty ($_POST ['oasl_action']) AND $_POST ['oasl_action'] == 'save_settings
       								<input type="button" id="autodetect_button" value="Click here to autodetect the best connection settings" />
       							</td>
       							<td>
-      								<div id="autodetect_result"></div>
+      								<strong id="autodetect_result"></strong>
       							</td>
       						</tr>
       					</table>
       				</td>
       			</tr>
-						<tr>
+				<tr>
       				<td>&nbsp;</td>
       			</tr>
       			<tr>
@@ -362,15 +388,15 @@ if (!empty ($_POST ['oasl_action']) AND $_POST ['oasl_action'] == 'save_settings
       				<td class="formArea">
       					<table border="0" cellspacing="2" cellpadding="2">
       						<tr>
-      						 	<td class="main" style="width:150px">API Subdomain:</td>
+      						 	<td class="main" style="width:170px">API Subdomain:</td>
       						 	<td class="main"><?php echo zen_draw_input_field ('api_subdomain', htmlspecialchars ($api_subdomain), 'size="35" id="api_subdomain"'); ?></td>
       						 </tr>
       						 <tr>
-      						 	<td class="main" style="width:150px">API Public Key:</td>
+      						 	<td class="main" style="width:170px">API Public Key:</td>
       						 	<td class="main"><?php echo zen_draw_input_field ('api_key', htmlspecialchars ($api_key), 'size="35" id="api_key"'); ?></td>
       						 </tr>
       						 <tr>
-      						 	<td class="main" style="width:150px">API Private Key:</td>
+      						 	<td class="main" style="width:170px">API Private Key:</td>
       						 	<td class="main"><?php echo zen_draw_input_field ('api_secret', htmlspecialchars ($api_secret), 'size="35" id="api_secret"'); ?></td>
       						 </tr>
       					</table>
@@ -384,7 +410,7 @@ if (!empty ($_POST ['oasl_action']) AND $_POST ['oasl_action'] == 'save_settings
       								<input type="button" id="verify_button" value="Click here to verify the API settings" />
       							</td>
       							<td>
-      								<div id="verify_result"></div>
+      								<strong id="verify_result"></strong>
       							</td>
       						</tr>
       					</table>
@@ -395,7 +421,25 @@ if (!empty ($_POST ['oasl_action']) AND $_POST ['oasl_action'] == 'save_settings
       			</tr>
       			<tr>
       				<td class="formAreaTitle">
-      					Social Networks
+      					Other Settings
+      				</td>
+      			</tr>
+      			<tr>
+      				<td class="formArea">
+      					<table border="0" cellspacing="2" cellpadding="2">
+      						<tr>
+      						 	<td class="main" style="width:170px">Social Login Title:</td>
+      						 	<td class="main"><?php echo zen_draw_input_field ('sidebox_title', htmlspecialchars ($sidebox_title), 'size="35" id="sidebox_title"'); ?></td>
+      						 </tr>    
+      					</table>
+      				</td>
+      			</tr>
+      			<tr>
+      				<td>&nbsp;</td>
+      			</tr>      			
+      			<tr>
+      				<td class="formAreaTitle">
+      					Social Networks - <a href="https://app.oneall.com/insights/" target="_blank">Click here to view the login statistics</a>
       				</td>
       			</tr>
 						<tr>
@@ -406,7 +450,7 @@ if (!empty ($_POST ['oasl_action']) AND $_POST ['oasl_action'] == 'save_settings
 							  {
 							  ?>
       									<tr>
-      						 				<td class="main" style="width:150px"><?php echo $provider_name; ?></td>
+      						 				<td class="main" style="width:170px"><?php echo $provider_name; ?></td>
       						 				<td class="main">
       						 					<?php
 													   echo zen_draw_radio_field ('providers[' . $provider_key . ']', '1', in_array ($provider_key, $enabled_providers), '', 'id="provider-' . $provider_key . '-1"');

@@ -14,7 +14,7 @@ jQuery(document).ready(function($) {
 		};
 
 		message_container = jQuery('#autodetect_result');
-		message_container.removeClass('oasl_success_message oasl_error_message').addClass('oasl_working_message');
+		message_container.removeClass().addClass('oasl_working_message text-warning');
 		message_container.html('Contacting API - please wait ...');
 
 		jQuery.post(path, data, function(response) {
@@ -61,13 +61,13 @@ jQuery(document).ready(function($) {
 				message_string = 'Autodetection Error - our <a href="http://docs.oneall.com/plugins/guide/" target="_blank">documentation</a> might help you fix this issue.';
 			}
 
-			message_container.removeClass('oasl_working_message');
+			message_container.removeClass();
 			message_container.html(message_string);
 
 			if (is_success) {
-				message_container.addClass('oasl_success_message');
+				message_container.addClass('oasl_success_message text-success');
 			} else {
-				message_container.addClass('oasl_error_message');
+				message_container.addClass('oasl_error_message text-danger');
 			}
 		});
 		return false;
@@ -102,7 +102,7 @@ jQuery(document).ready(function($) {
 		};
 
 		message_container = jQuery('#verify_result');
-		message_container.removeClass('oasl_success_message oasl_error_message').addClass('oasl_working_message');
+		message_container.removeClass().addClass('oasl_working_message text-warning');
 		message_container.html('Contacting API - please wait ...');
 
 		jQuery.post(path, data, function(response) {
@@ -126,13 +126,13 @@ jQuery(document).ready(function($) {
 				message_string = 'An unknow error occured! The settings could not be verified.';
 			}
 
-			message_container.removeClass('oasl_working_message');
+			message_container.removeClass();
 			message_container.html(message_string);
 
 			if (is_success) {
-				message_container.addClass('oasl_success_message');
+				message_container.addClass('oasl_success_message text-success');
 			} else {
-				message_container.addClass('oasl_error_message');
+				message_container.addClass('oasl_error_message text-danger');
 			}
 		});
 		return false;

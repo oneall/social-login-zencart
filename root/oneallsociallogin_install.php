@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   	OneAll Social Login
- * @copyright 	Copyright 2011-2016 http://www.oneall.com - All rights reserved.
+ * @copyright 	Copyright 2011-2017 http://www.oneall.com
  * @license   	GNU/GPL 2 or later
  *
  * This program is free software; you can redistribute it and/or
@@ -101,7 +101,8 @@ if ( ! empty ($current_template_dir) && is_dir ($current_template_dir))
 		$files[] = 'jscript/jscript_oneallsociallogin.php';
 		$files[] = 'sideboxes/oneallsociallogin.php';
 		$files[] = 'templates/tpl_oneallsociallogin_default.php';
-			
+		$files[] = 'templates/tpl_oneallsociallogin_widget.php';
+		
 		// Debug
 		$messages [] = "Default template directory [".$default_template_dir."]";
 		$messages [] = "Current template directory [".$current_template_dir."]";
