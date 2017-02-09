@@ -56,7 +56,7 @@ if (!empty ($oasl_config ['enabled_providers']))
 //Setup parameters
 $oasl_sidebox_title = (!empty ($oasl_config ['sidebox_title']) ? $oasl_config ['sidebox_title'] : '');
 $oasl_sidebox_providers = implode ("','", $oasl_enabled_providers);
-$oasl_sidebox_callback = zen_href_link ('oneallsociallogin', 'origin=');
+$oasl_sidebox_callback = zen_href_link ('oneallsociallogin');
 $oasl_sidebox_node = 'oneall_social_login_providers_' . mt_rand (10000, 99999);
 
 //Setup sidebox
@@ -66,9 +66,12 @@ $content = <<<HEREDOC
 	<div class="sideBoxContent">
 		<div class="oneall_social_login_providers" id="$oasl_sidebox_node"></div>
 		<script type="text/javascript">
+			var _oneall_callback_uri = '$oasl_sidebox_callback';
+			_oneall_callback_uri += (_oneall_callback_uri.split('?')[1] ? '&amp;': '?') + ('origin=' + encodeURIComponent(window.location.href));
+		
 			var _oneall = _oneall || [];
 			_oneall.push(['social_login', 'set_providers', ['$oasl_sidebox_providers']]);
-			_oneall.push(['social_login', 'set_callback_uri', '$oasl_sidebox_callback' + encodeURIComponent(window.location.href)]);
+			_oneall.push(['social_login', 'set_callback_uri', _oneall_callback_uri]);
 			_oneall.push(['social_login', 'do_render_ui', '$oasl_sidebox_node']);
 		</script>
 	</div>
