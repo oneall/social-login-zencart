@@ -30,6 +30,14 @@
  */
 require('includes/application_top.php');
 
+// Allow uninstallation?
+$allow_uninstall = false;
+
+// Security Check
+if ( ! $allow_uninstall)
+{
+	die ('The un-installation is not enabled. Please edit this file and set $allow_uninstall to true in order to execute the script.');
+}
 
 //Define tables
 if (!defined ('TABLE_ONEALLSOCIALLOGIN'))
