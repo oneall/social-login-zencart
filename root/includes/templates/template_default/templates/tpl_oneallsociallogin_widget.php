@@ -67,13 +67,12 @@ if (!function_exists ('oneall_sociallogin_widget'))
 		?>
 			<div class="oneall_social_login-widget">
 				<div class="oneall_social_login_providers" id="<?php echo $widget_container_id;?>"></div>
-					<script type="text/javascript">
-						var _oneall = _oneall || [];
-						_oneall.push(['social_login', 'set_providers', ['<?php echo $widget_providers; ?>']]);
-						_oneall.push(['social_login', 'set_callback_uri', '<?php echo $widget_callback; ?>' + encodeURIComponent(window.location.href)]);
-						_oneall.push(['social_login', 'do_render_ui', '<?php echo $widget_container_id; ?>']);
-					</script>
-				</div>
+				<script type="text/javascript">
+					var _oneall = _oneall || [];
+					_oneall.push(['social_login', 'set_providers', ['<?php echo $widget_providers; ?>']]);
+					_oneall.push(['social_login', 'set_callback_uri', '<?php echo $widget_callback; ?>' + encodeURIComponent(window.location.href)]);
+					_oneall.push(['social_login', 'do_render_ui', '<?php echo $widget_container_id; ?>']);
+				</script>
 			</div>
 		<?php
 	}
