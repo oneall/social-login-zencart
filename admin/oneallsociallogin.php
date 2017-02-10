@@ -185,6 +185,8 @@ $api_secret = (isset ($oasl_config ['api_secret']) ? $oasl_config ['api_secret']
 $api_connection_handler = ((isset ($oasl_config ['api_connection_handler']) AND $oasl_config ['api_connection_handler'] == 'fsockopen') ? 'fsockopen' : 'curl');
 $api_connection_protocol = ((isset ($oasl_config ['api_connection_protocol']) AND $oasl_config ['api_connection_protocol'] == 'http') ? 'http' : 'https');
 $sidebox_title = (isset ($oasl_config ['sidebox_title']) ? $oasl_config ['sidebox_title'] : '');
+$send_mail_customers = (isset ($oasl_config ['send_mail_customers']) ? $oasl_config ['send_mail_customers'] : 1);
+$send_mail_admin = (isset ($oasl_config ['send_mail_admin']) ? $oasl_config ['send_mail_admin'] : 1);
 
 //Compute enabled providers
 $enabled_providers = array ();
@@ -246,6 +248,16 @@ if (!empty ($_POST ['oasl_action']) AND $_POST ['oasl_action'] == 'save_settings
 	$sql = "INSERT INTO " . TABLE_ONEALLSOCIALLOGIN_CONFIG . " SET `tag`='sidebox_title', `data`='" . zen_db_input ($sidebox_title) . "' ON DUPLICATE KEY UPDATE `data`='" .  zen_db_input ($sidebox_title) . "'";
 	$result = $db->Execute ($sql);
 	
+	// Send email to customers
+	$send_mail_customers = (empty ($_POST ['send_mail_customers']) ? 0 : 1);
+	$sql = "INSERT INTO " . TABLE_ONEALLSOCIALLOGIN_CONFIG . " SET `tag`='send_mail_customers', `data`='" . zen_db_input ($send_mail_customers) . "' ON DUPLICATE KEY UPDATE `data`='" .  zen_db_input ($send_mail_customers) . "'";
+	$result = $db->Execute ($sql);
+	
+	// Send email to admin
+	$send_mail_admin = (empty ($_POST ['send_mail_admin']) ? 0 : 1);
+	$sql = "INSERT INTO " . TABLE_ONEALLSOCIALLOGIN_CONFIG . " SET `tag`='send_mail_admin', `data`='" . zen_db_input ($send_mail_admin) . "' ON DUPLICATE KEY UPDATE `data`='" .  zen_db_input ($send_mail_admin) . "'";
+	$result = $db->Execute ($sql);
+	
 	//Providers
 	if (isset ($_POST['providers']) AND is_array ($_POST['providers']))
 	{
@@ -284,7 +296,7 @@ if (!empty ($_POST ['oasl_action']) AND $_POST ['oasl_action'] == 'save_settings
 	<body>
 		<?php require(DIR_WS_INCLUDES . 'header.php'); ?>
 		<table border="0" width="100%" cellspacing="2" cellpadding="2">
-  		<tr>
+  			<tr>
 				<td width="100%" valign="top">
 					<?php
 						echo zen_draw_form ('oneallsociallogin', 'oneallsociallogin', '', 'post');
@@ -294,24 +306,32 @@ if (!empty ($_POST ['oasl_action']) AND $_POST ['oasl_action'] == 'save_settings
 						<tr>
 							<td>
 								<table border="0" width="100%" cellspacing="0" cellpadding="0">
-          				<tr>
-            				<td class="pageHeading">OneAll Social Login Config</td>
-            				<td class="pageHeading" align="right"><?php echo zen_draw_separator ('pixel_trans.gif', HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></td>
+          							<tr>
+            							<td class="pageHeading">
+            								OneAll Social Login Config - 
+            									<span style="font-size:12px">
+            										<a href="http://support.oneall.com" target="_blank">OneAll Support Forum</a> |
+            										<a href="http://docs.oneall.com/plugins/guide/social-login-zen-cart/#3b" target="_blank">Plugin Documentation</a>
+            									</span>
+            							</td>
+            							<td class="pageHeading" align="right">
+            								<?php echo zen_draw_separator ('pixel_trans.gif', HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?>
+            							</td>
 									</tr>
 								</table>
 							</td>
-      			</tr>
-      			<tr>
-      				<td class="formAreaTitle">
-      					Notice
-      				</td>
-      			</tr>
-      			<tr>
+      					</tr>
+      					<tr>
+      						<td class="formAreaTitle">
+      							Notice
+      						</td>
+      					</tr>
+      					<tr>
       				<td class="formArea">
       					<table border="0" cellspacing="2" cellpadding="2">
       						<tr>
       						 	<td class="main">
-     						 		Per default Social Login will be added to the sidebar of your shop. If your shop does not have a sidebar, then our <a href="http://docs.oneall.loc/plugins/guide/social-login-zen-cart/#3b" target="_blank">documentation</a> will help you manually add the social login icons to any other location.
+     						 		Per default Social Login will be added to the sidebar of your shop. If your shop does not have a sidebar, then our <a href="http://docs.oneall.com/plugins/guide/social-login-zen-cart/#3b" target="_blank">documentation</a> will help you manually add the social login icons to any other location.
       						 	</td>
       						</tr>
       					</table>
@@ -330,7 +350,7 @@ if (!empty ($_POST ['oasl_action']) AND $_POST ['oasl_action'] == 'save_settings
       				<td class="formArea">
       					<table border="0" cellspacing="2" cellpadding="2">
       						<tr>
-      						 	<td class="main" style="width:170px">API Connection Handler:</td>
+      						 	<td class="main" style="width:200px">API Connection Handler:</td>
       						 	<td class="main">
 	      						 	<?php
 									  		 echo zen_draw_radio_field ('api_connection_handler', 'curl', ($api_connection_handler <> 'fsockopen'), '', 'id="api_connection_handler_curl"');
@@ -344,7 +364,7 @@ if (!empty ($_POST ['oasl_action']) AND $_POST ['oasl_action'] == 'save_settings
 										</td>
       						 </tr>
       						 <tr>
-      							<td class="main" style="width:170px">
+      							<td class="main" style="width:200px">
       								API Connection Protocol:
       							</td>
       						 	<td class="main">
@@ -357,7 +377,7 @@ if (!empty ($_POST ['oasl_action']) AND $_POST ['oasl_action'] == 'save_settings
 									  	 echo zen_draw_radio_field ('api_connection_protocol', 'http', ($api_connection_protocol == 'http'), '', 'id="api_connection_protocol_http"');
 									  	 echo '<label class="radioButtonLabel" for="api_connection_protocol_http">Communication via HTTP on port 80</label>';
 									   ?>
-										</td>
+								</td>
       						 </tr>
       					</table>
       				</td>
@@ -388,15 +408,15 @@ if (!empty ($_POST ['oasl_action']) AND $_POST ['oasl_action'] == 'save_settings
       				<td class="formArea">
       					<table border="0" cellspacing="2" cellpadding="2">
       						<tr>
-      						 	<td class="main" style="width:170px">API Subdomain:</td>
+      						 	<td class="main" style="width:200px">API Subdomain:</td>
       						 	<td class="main"><?php echo zen_draw_input_field ('api_subdomain', htmlspecialchars ($api_subdomain), 'size="35" id="api_subdomain"'); ?></td>
       						 </tr>
       						 <tr>
-      						 	<td class="main" style="width:170px">API Public Key:</td>
+      						 	<td class="main" style="width:200px">API Public Key:</td>
       						 	<td class="main"><?php echo zen_draw_input_field ('api_key', htmlspecialchars ($api_key), 'size="35" id="api_key"'); ?></td>
       						 </tr>
       						 <tr>
-      						 	<td class="main" style="width:170px">API Private Key:</td>
+      						 	<td class="main" style="width:200px">API Private Key:</td>
       						 	<td class="main"><?php echo zen_draw_input_field ('api_secret', htmlspecialchars ($api_secret), 'size="35" id="api_secret"'); ?></td>
       						 </tr>
       					</table>
@@ -421,16 +441,47 @@ if (!empty ($_POST ['oasl_action']) AND $_POST ['oasl_action'] == 'save_settings
       			</tr>
       			<tr>
       				<td class="formAreaTitle">
-      					Other Settings
+      					General Settings
       				</td>
       			</tr>
       			<tr>
       				<td class="formArea">
       					<table border="0" cellspacing="2" cellpadding="2">
       						<tr>
-      						 	<td class="main" style="width:170px">Social Login Title:</td>
+      						 	<td class="main" style="width:200px">Social Login Title:</td>
       						 	<td class="main"><?php echo zen_draw_input_field ('sidebox_title', htmlspecialchars ($sidebox_title), 'size="35" id="sidebox_title"'); ?></td>
       						 </tr>    
+      						<tr>
+      						 	<td class="main" style="width:200px">
+      						 		Send email to customers?
+      						 	</td>
+      						 	<td class="main">
+	      							<?php 
+										echo zen_draw_radio_field ('send_mail_customers', '0', ($send_mail_customers == '0'), '', 'id="send_mail_customers_0"');
+									  	echo '<label class="radioButtonLabel" for="send_mail_customers_0">No</label>';
+									?>
+									
+									<?php
+										echo zen_draw_radio_field ('send_mail_customers', '1', ($send_mail_customers <> '0'), '', 'id="send_mail_customers_1"');
+									 	echo '<label class="radioButtonLabel" for="send_mail_customers_1">Yes, send email to new customers</label>';
+									?>
+								</td>
+      						 </tr>        			
+      						 <tr>
+      						 	<td class="main" style="width:200px">
+      						 		Send email to admin?
+      						 	</td>
+      						 	<td class="main">
+	      							<?php 
+										echo zen_draw_radio_field ('send_mail_admin', '0', ($send_mail_admin == '0'), '', 'id="send_mail_admin_0"');
+									  	echo '<label class="radioButtonLabel" for="send_mail_admin_0">No</label>';
+									?>
+	      							<?php
+										echo zen_draw_radio_field ('send_mail_admin', '1', ($send_mail_admin <> '0'), '', 'id="send_mail_admin_1"');
+									 	echo '<label class="radioButtonLabel" for="send_mail_admin_1">Yes, inform admin of new customers</label>';
+									?>									
+								</td>
+      						 </tr>       						 
       					</table>
       				</td>
       			</tr>
@@ -439,7 +490,7 @@ if (!empty ($_POST ['oasl_action']) AND $_POST ['oasl_action'] == 'save_settings
       			</tr>      			
       			<tr>
       				<td class="formAreaTitle">
-      					Social Networks - <a href="https://app.oneall.com/insights/" target="_blank">Click here to view the login statistics</a>
+      					Social Networks - <a href="https://app.oneall.com/insights/" target="_blank">Click here to view your Social Login statistics</a>
       				</td>
       			</tr>
 						<tr>
@@ -450,7 +501,9 @@ if (!empty ($_POST ['oasl_action']) AND $_POST ['oasl_action'] == 'save_settings
 							  {
 							  ?>
       									<tr>
-      						 				<td class="main" style="width:170px"><?php echo $provider_name; ?></td>
+      						 				<td class="main" style="width:200px">
+      						 					<?php echo $provider_name; ?>
+      						 				</td>
       						 				<td class="main">
       						 					<?php
 													   echo zen_draw_radio_field ('providers[' . $provider_key . ']', '1', in_array ($provider_key, $enabled_providers), '', 'id="provider-' . $provider_key . '-1"');

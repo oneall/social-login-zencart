@@ -228,50 +228,60 @@ $sql = "CREATE TABLE IF NOT EXISTS " . TABLE_ONEALLSOCIALLOGIN_CONFIG . " (`oasl
 $result = $db->Execute ($sql);
 $messages [] = "Database table [" . TABLE_ONEALLSOCIALLOGIN_CONFIG . "] added";
 
-// Add available providers
+// Settings \ Available providers
 $sql = "INSERT INTO " . TABLE_ONEALLSOCIALLOGIN_CONFIG . " SET `tag`='available_providers', `data`='" . serialize ($providers) . "' ON DUPLICATE KEY UPDATE `data`='" . serialize ($providers) . "'";
 $result = $db->Execute ($sql);
 $messages [] = "Database entry [" . TABLE_ONEALLSOCIALLOGIN_CONFIG . ":available_providers] added";
 
-// Add enabled providers
+// Settings \ Enabled providers
 $sql = "INSERT IGNORE INTO " . TABLE_ONEALLSOCIALLOGIN_CONFIG . " SET `tag`='enabled_providers', `data`='facebook,google,twitter,linkedin'";
 $result = $db->Execute ($sql);
 $messages [] = "Database entry [" . TABLE_ONEALLSOCIALLOGIN_CONFIG . ":enabled_providers] added";
 
-// Add API subdomain
+// Settings \ API subdomain
 $sql = "INSERT IGNORE INTO " . TABLE_ONEALLSOCIALLOGIN_CONFIG . " SET `tag`='api_subdomain', `data`=''";
 $result = $db->Execute ($sql);
 $messages [] = "Database entry [" . TABLE_ONEALLSOCIALLOGIN_CONFIG . ":api_subdomain] added";
 
-// Add API key
+// Settings \ API key
 $sql = "INSERT IGNORE INTO " . TABLE_ONEALLSOCIALLOGIN_CONFIG . " SET `tag`='api_key', `data`=''";
 $result = $db->Execute ($sql);
 $messages [] = "Database entry [" . TABLE_ONEALLSOCIALLOGIN_CONFIG . ":api_key] added";
 
-// Add API secret
+// Settings \ API secret
 $sql = "INSERT IGNORE INTO " . TABLE_ONEALLSOCIALLOGIN_CONFIG . " SET `tag`='api_secret', `data`=''";
 $result = $db->Execute ($sql);
 $messages [] = "Database entry [" . TABLE_ONEALLSOCIALLOGIN_CONFIG . ":api_secret] added";
 
-// Add API connection protocol
+// Settings \ API connection protocol
 $sql = "INSERT IGNORE INTO " . TABLE_ONEALLSOCIALLOGIN_CONFIG . " SET `tag`='api_connection_handler', `data`='curl'";
 $result = $db->Execute ($sql);
 $messages [] = "Database entry [" . TABLE_ONEALLSOCIALLOGIN_CONFIG . ":api_connection_protocol] added";
 
-// Add API connection https flag
+// Settings \ API connection https flag
 $sql = "INSERT IGNORE INTO " . TABLE_ONEALLSOCIALLOGIN_CONFIG . " SET `tag`='api_connection_protocol', `data`='https'";
 $result = $db->Execute ($sql);
 $messages [] = "Database entry [" . TABLE_ONEALLSOCIALLOGIN_CONFIG . ":api_connection_use_https] added";
 
-// Add sidebox title
+// Settings \ Sidebox title
 $sql = "INSERT IGNORE INTO " . TABLE_ONEALLSOCIALLOGIN_CONFIG . " SET `tag`='sidebox_title', `data`='Connect with'";
 $result = $db->Execute ($sql);
 $messages [] = "Database entry [" . TABLE_ONEALLSOCIALLOGIN_CONFIG . ":sidebox_title] added";
 
-// Add account linking flag
+// Settings \ Account linking flag
 $sql = "INSERT IGNORE INTO " . TABLE_ONEALLSOCIALLOGIN_CONFIG . " SET `tag`='flag_account_linking', `data`='1'";
 $result = $db->Execute ($sql);
 $messages [] = "Database entry [" . TABLE_ONEALLSOCIALLOGIN_CONFIG . ":flag_account_linking] added";
+
+// Settings \ Send email to customers
+$sql = "INSERT IGNORE INTO " . TABLE_ONEALLSOCIALLOGIN_CONFIG . " SET `tag`='send_mail_customers', `data`='1'";
+$result = $db->Execute ($sql);
+$messages [] = "Database entry [" . TABLE_ONEALLSOCIALLOGIN_CONFIG . ":send_mail_customers] added";
+
+// Settings \ Send email to customers
+$sql = "INSERT IGNORE INTO " . TABLE_ONEALLSOCIALLOGIN_CONFIG . " SET `tag`='send_mail_admin', `data`='1'";
+$result = $db->Execute ($sql);
+$messages [] = "Database entry [" . TABLE_ONEALLSOCIALLOGIN_CONFIG . ":send_mail_admin] added";
 
 //Done!
 $messages [] = "<strong>Done! Please remove this file now.</strong>"

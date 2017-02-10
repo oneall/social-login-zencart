@@ -60,7 +60,7 @@ if (isset ($_POST) AND !empty ($_POST ['oa_action']) AND $_POST ['oa_action'] ==
 		$api_connection_handler = ((isset ($oasl_config ['api_connection_handler']) AND $oasl_config ['api_connection_handler'] == 'fsockopen') ? 'fsockopen' : 'curl');
 		$api_connection_protocol = ((isset ($oasl_config ['api_connection_protocol']) AND $oasl_config ['api_connection_protocol'] == 'http') ? 'http' : 'https');
 		$enable_account_linking = ((!isset ($oasl_config ['flag_account_linking']) OR !empty ($oasl_config ['flag_account_linking'])) ? true : false);
-
+		
 		// API Resource-
 		$api_resource_url = $api_connection_protocol . '://' . $api_subdomain . '.api.oneall.com/connections/' . $_POST ['connection_token'] . '.json';
 
@@ -376,7 +376,12 @@ if (isset ($_SESSION ['oasl_user_data']))
 				//No errors?
 				if (!$error)
 				{
-					if (($customers_id_tmp = oneallsociallogin_tools::create_customer_from_data ($user_data)) !== false)
+					// Send Mails?
+					$send_mail_customers = ((!isset ($oasl_config ['send_mail_customers']) OR !empty ($oasl_config ['send_mail_customers'])) ? true : false);
+					$send_mail_admin = ((!isset ($oasl_config ['send_mail_admin']) OR !empty ($oasl_config ['send_mail_admin'])) ? true : false);
+					
+					// Create Customer
+					if (($customers_id_tmp = oneallsociallogin_tools::create_customer_from_data ($user_data, $send_mail_admin, $send_mail_customers)) !== false)
 					{
 						$customers_id = $customers_id_tmp;
 						$new_registration = true;
