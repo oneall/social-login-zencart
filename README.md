@@ -20,7 +20,7 @@ new users and provides permission-based social data retrieved from the social ne
 * Github.com
 * Google
 * Instagram
-* LinkedIn'
+* LinkedIn
 * LiveJournal
 * Mail.ru
 * Odnoklassniki
