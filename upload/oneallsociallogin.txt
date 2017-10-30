@@ -1,5 +1,5 @@
 *******************************************************************************
-** VERSION 2.1.0
+** VERSION 2.2.0
 *******************************************************************************
 
 OneAll Social Login
@@ -22,35 +22,43 @@ and your users don't have to start from scratch.
 
 *** 30+ Supported Social Networks ***
 - Amazon
-- Battle.net
+- BattleNet
 - Blogger
-- Disqus
+- Draugiem
 - Dribbble
+- Discord
+- Disqus
 - Facebook
 - Foursquare
 - Github.com
 - Google
 - Instagram
+- Line
 - LinkedIn
 - LiveJournal
 - Mail.ru
+- Meetup
 - Odnoklassniki
 - OpenID
 - PayPal
 - Pinterest
 - PixelPin
 - Reddit
-- Skyrock.com
+- Skyrock.com	
+- SoundCloud	
 - StackExchange
 - Steam
+- Tumblr
 - Twitch.tv
 - Twitter
 - Vimeo
 - VKontakte
+- Weibo
 - Windows Live
 - WordPress.com
+- Xing
 - Yahoo
-- YouTube 
+- YouTube
 
 
 *** About Us ***

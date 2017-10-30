@@ -1,4 +1,4 @@
-# Social Login 2.1.0 for Zen Cart 1.5+
+# Social Login 2.2.0 for Zen Cart 1.5+
 Social Login for Zen Cart allows your users to login and register with 30+ social networks. 
 It increases your Zen Cart user registration rate by simplifying the registration process for 
 new users and provides permission-based social data retrieved from the social network profiles.
@@ -18,31 +18,39 @@ https://www.zen-cart.com/downloads.php?do=file&id=1669
 * Blogger
 * Draugiem
 * Dribbble
+* Discord
 * Disqus
 * Facebook
 * Foursquare
 * Github.com
 * Google
 * Instagram
+* Line
 * LinkedIn
 * LiveJournal
 * Mail.ru
+* Meetup
 * Odnoklassniki
 * OpenID
 * PayPal
+* Pinterest
+* PixelPin
 * Reddit
-* Skyrock.com		
+* Skyrock.com	
+* SoundCloud	
 * StackExchange
 * Steam
+* Tumblr
 * Twitch.tv
 * Twitter
 * Vimeo
 * VKontakte
+* Weibo
 * Windows Live
 * WordPress.com
+* Xing
 * Yahoo
 * YouTube
-
 
 ## About Us
 Social Login has been created and is maintained by [OneAll](http://www.oneall.com/), a technology company offering a set of 
