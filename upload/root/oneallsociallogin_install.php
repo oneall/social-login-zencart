@@ -58,6 +58,7 @@ $providers = array(
     'livejournal' => 'LiveJournal',
     'mailru' => 'Mail.ru',
     'meetup' => 'Meetup',
+    'mixer' => 'Mixer',
     'odnoklassniki' => 'Odnoklassniki',
     'openid' => 'OpenID',
     'paypal' => 'PayPal',
