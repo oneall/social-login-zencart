@@ -202,16 +202,6 @@ while (!$rows->EOF)
     $rows->MoveNext();
 }
 
-// // Calculate sort_order
-// $sql = "SELECT MAX(sort_order)+1 AS sort_order FROM " . TABLE_ADMIN_PAGES;
-// $result = $db->Execute($sql);
-// $sort_order = $result->fields['sort_order'];
-
-// // Add admin page
-// $sql = "INSERT INTO " . TABLE_ADMIN_PAGES . " SET `page_key` = 'configOneallSocialLoginSettings', `language_key` = 'BOX_CONFIGURATION_ONEALLSOCIALOGIN', `main_page` = 'FILENAME_CONFIGURATION', `page_params` = 'gID=" . $configuration_group_id . "', `menu_key` = 'configuration', `display_on_menu` = 'Y', `sort_order` = '" . $sort_order . "'";
-// $result = $db->Execute($sql);
-// $messages[] = "Database entry [" . TABLE_ADMIN_PAGES . ":configOneallSocialLoginSettings] added";
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 // USER
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
