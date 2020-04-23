@@ -61,6 +61,7 @@ $providers = array(
     'mixer' => 'Mixer',
     'odnoklassniki' => 'Odnoklassniki',
     'openid' => 'OpenID',
+    'patreon' => 'Patreon',
     'paypal' => 'PayPal',
     'pinterest' => 'Pinterest',
     'pixelpin' => 'PixelPin',
