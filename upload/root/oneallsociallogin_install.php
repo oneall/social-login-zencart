@@ -43,6 +43,7 @@ if (!defined('TABLE_ONEALLSOCIALLOGIN'))
 // Available providers
 $providers = array(
     'amazon' => 'Amazon',
+    'apple' => 'Apple',
     'battlenet' => 'Battle.net',
     'blogger' => 'Blogger',
     'discord' => 'Discord',

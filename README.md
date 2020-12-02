@@ -1,4 +1,4 @@
-# Social Login 2.4.0 for Zen Cart 1.5+
+# Social Login 2.5.0 for Zen Cart 1.5+
 Social Login for Zen Cart allows your users to login and register with 35+ social networks. 
 It increases your Zen Cart user registration rate by simplifying the registration process for 
 new users and provides permission-based social data retrieved from the social network profiles.
@@ -13,6 +13,7 @@ https://www.zen-cart.com/downloads.php?do=file&id=1669
 
 
 ## Supported Social Networks
+* Apple
 * Amazon
 * BattleNet
 * Blogger
