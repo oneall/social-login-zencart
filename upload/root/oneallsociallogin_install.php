@@ -49,6 +49,7 @@ $providers = array(
     'discord' => 'Discord',
     'disqus' => 'Disqus',
     'dribbble' => 'Dribbble',
+    'epicgames' => 'Epic Games',
     'facebook' => 'Facebook',
     'foursquare' => 'Foursquare',
     'github' => 'Github.com',
@@ -69,8 +70,10 @@ $providers = array(
     'reddit' => 'Reddit',
     'skyrock' => 'Skyrock.com',
     'soundcloud' => 'SoundCloud',
+    'spotify' => 'Spotify',
     'stackexchange' => 'StackExchange',
     'steam' => 'Steam',
+    'strava' => 'Strava',
     'tumblr' => 'Tumblr',
     'twitch' => 'Twitch.tv',
     'twitter' => 'Twitter',
@@ -81,6 +84,7 @@ $providers = array(
     'wordpress' => 'WordPress.com',
     'xing' => 'Xing',
     'yahoo' => 'Yahoo',
+    'yandex' => 'Yandex',
     'youtube' => 'YouTube'
 );
 

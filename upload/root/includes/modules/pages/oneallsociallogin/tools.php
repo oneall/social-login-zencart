@@ -26,7 +26,7 @@
 /**
  * ONEALL TOOLBOX
  */
-define('SOCIAL_LOGIN_VERSION', '2.5.0');
+define('SOCIAL_LOGIN_VERSION', '2.6.0');
 define('SOCIAL_LOGIN_USERAGENT', 'SocialLogin/' . SOCIAL_LOGIN_VERSION . ' ZenCart/1.5.x (+http://www.oneall.com/)');
 
 // OneAll Social Login Toolbox

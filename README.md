@@ -1,4 +1,4 @@
-# Social Login 2.5.0 for Zen Cart 1.5+
+# Social Login 2.6.0 for Zen Cart 1.5+
 Social Login for Zen Cart allows your users to login and register with 35+ social networks. 
 It increases your Zen Cart user registration rate by simplifying the registration process for 
 new users and provides permission-based social data retrieved from the social network profiles.
@@ -15,12 +15,13 @@ https://www.zen-cart.com/downloads.php?do=file&id=1669
 ## Supported Social Networks
 * Apple
 * Amazon
-* BattleNet
+* Battle.net
 * Blogger
+* Discord 
+* Disqus
 * Draugiem
 * Dribbble
-* Discord
-* Disqus
+* Epic Games
 * Facebook
 * Foursquare
 * Github.com
@@ -37,12 +38,14 @@ https://www.zen-cart.com/downloads.php?do=file&id=1669
 * Patreon
 * PayPal
 * Pinterest
-* PixelPin
+* PixelPin 
 * Reddit
-* Skyrock.com	
-* SoundCloud	
+* Skyrock.com
+* SoundCloud        
+* Spotify
 * StackExchange
 * Steam
+* Strava
 * Tumblr
 * Twitch.tv
 * Twitter
@@ -51,8 +54,9 @@ https://www.zen-cart.com/downloads.php?do=file&id=1669
 * Weibo
 * Windows Live
 * WordPress.com
-* Xing
+* XING
 * Yahoo
+* Yandex
 * YouTube
 
 ## About Us

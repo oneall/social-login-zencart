@@ -1,5 +1,5 @@
 *******************************************************************************
-** VERSION 2.5.0
+** VERSION 2.6.0
 *******************************************************************************
 
 OneAll Social Login
@@ -23,12 +23,13 @@ and your users don't have to start from scratch.
 *** 30+ Supported Social Networks ***
 - Apple
 - Amazon
-- BattleNet
+- Battle.net
 - Blogger
+- Discord 
+- Disqus
 - Draugiem
 - Dribbble
-- Discord
-- Disqus
+- Epic Games
 - Facebook
 - Foursquare
 - Github.com
@@ -45,12 +46,14 @@ and your users don't have to start from scratch.
 - Patreon
 - PayPal
 - Pinterest
-- PixelPin
+- PixelPin 
 - Reddit
-- Skyrock.com	
-- SoundCloud	
+- Skyrock.com
+- SoundCloud        
+- Spotify
 - StackExchange
 - Steam
+- Strava
 - Tumblr
 - Twitch.tv
 - Twitter
@@ -59,8 +62,9 @@ and your users don't have to start from scratch.
 - Weibo
 - Windows Live
 - WordPress.com
-- Xing
+- XING
 - Yahoo
+- Yandex
 - YouTube
 
 
